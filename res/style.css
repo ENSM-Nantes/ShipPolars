@@ -1,0 +1,42 @@
+.title-label {
+  font-weight: bold;
+  font-style: normal;
+  font-size: 32px;
+  color: White;
+  font-family: "Inter Black";
+}
+
+.textIn-label {
+  font-style: normal;
+  font-size: 24px;
+  color: White;
+  font-family: "Inter Black";
+}
+
+.textOut-label {
+  font-style: normal;
+  font-size: 14px;
+  color: White;
+  font-family: "Inter Black";
+}
+
+.header-label {
+  font-weight: bold;
+  font-style: normal;
+  font-size: 48px;
+  color: White;
+  font-family: "Inter Black";
+}
+
+.footer-label {
+  font-style: normal;
+  font-size: 14px;
+  color: White;
+}
+
+.back-template {
+  background-image: url("wallpaper.png"); 
+  background-size: cover;            
+  background-repeat: no-repeat;
+  background-position: center;
+}
