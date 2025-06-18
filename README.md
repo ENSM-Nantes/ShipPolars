@@ -11,4 +11,4 @@ libgtk-4-dev
 ./PolarInject
 
 ## Example
-![alt text](https://github.com/ENSM-Nantes/PolarInject/tree/main/screenshot.png)
+![alt text](https://github.com/ENSM-Nantes/PolarInject/blob/main/res/screenshot.png)
