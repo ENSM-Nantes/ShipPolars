@@ -5,7 +5,7 @@ Send Polar read from Shiplify.io to BridgeCommand
 libgtk-4-dev
 
 ## Build
-gcc $(pkg-config --cflags gtk4) -o PolarInject *.c $(pkg-config --libs gtk4)
+```gcc $(pkg-config --cflags gtk4) -o PolarInject *.c $(pkg-config --libs gtk4)```
 
 ## Use
 ./PolarInject
