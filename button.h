@@ -3,8 +3,8 @@
 
 #include <gtk/gtk.h>
 
-#define SIZE_PATH_MAX (128)
-#define SIZE_CMD_MAX (256)
+#define SIZE_PATH_MAX (256)
+#define SIZE_CMD_MAX (SIZE_PATH_MAX)
 #define PREFIX_SEL_FILE ("\tSelected file : \t")
 
 typedef struct{

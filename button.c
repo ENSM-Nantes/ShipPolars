@@ -20,9 +20,20 @@ static void CbkBrowsePolar(GObject *aSource, GAsyncResult *aRes, gpointer aData)
       strcpy(dest, PREFIX_SEL_FILE);
       strcat(dest, path);
       strncpy(pData->path, path, SIZE_PATH_MAX);
-      //printf("Path : %s\n", pData->path);
-      gtk_label_set_text(pData->labelOut, dest);
-      gtk_picture_set_filename(GTK_PICTURE( pData->logo ), "res/check.png");
+
+      if(path[strlen(path)-3] == '.' &&
+	 path[strlen(path)-2] == 'n' &&
+	 path[strlen(path)-1] == 'c')
+	{
+	  gtk_label_set_text(pData->labelOut, dest);
+	  gtk_picture_set_filename(GTK_PICTURE( pData->logo ), "res/check.png");
+	}
+      else
+	{
+	  gtk_label_set_text(pData->labelOut, "\tWrong polar file format");
+	  gtk_picture_set_filename(GTK_PICTURE( pData->logo ), "res/cross.png");
+	}
+      
       gtk_widget_set_margin_start(pData->logo, 30);
       g_free(path);
       g_object_unref(file);

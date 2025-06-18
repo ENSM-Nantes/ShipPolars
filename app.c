@@ -16,7 +16,7 @@ void AppActivate(GApplication *app)
   /*Window*/
   win = gtk_application_window_new (GTK_APPLICATION (app));
   gtk_window_set_title (GTK_WINDOW (win), "Polar Injection");
-  gtk_window_set_default_size (GTK_WINDOW (win), 1280, 1024);
+  gtk_window_set_default_size (GTK_WINDOW (win), 1920, 1200);
   gtk_window_set_resizable(GTK_WINDOW(win), TRUE);
   gtk_window_set_decorated(GTK_WINDOW(win), TRUE);
   /********/
