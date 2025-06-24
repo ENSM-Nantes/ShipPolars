@@ -5,18 +5,19 @@ void OpenShiplify(void)
   system("xdg-open 'https://www.shiplify.io'");
 }
 
-static void CbkBrowsePolar(GObject *aSource, GAsyncResult *aRes, gpointer aData)
+static void CbkBrowsePolar(GtkNativeDialog *aDialog, int aRes, gpointer aData)
 {
-  GtkFileDialog *dialog = GTK_FILE_DIALOG(aSource);
-
-  GError *error = NULL;
-  GFile *file = gtk_file_dialog_open_finish(dialog, aRes, &error);
-  
-  if(file)
+  GtkFileChooser *chooser = GTK_FILE_CHOOSER(aDialog);
+ 
+  if(aRes == GTK_RESPONSE_ACCEPT)
     {
       char dest[SIZE_PATH_MAX+strlen(PREFIX_SEL_FILE)];
-      char *path = g_file_get_path(file);
+      GListModel *files = gtk_file_chooser_get_files(chooser);
       sBrowseData *pData = aData;
+
+      GFile *file = g_list_model_get_item(files, 0);
+      char *path = g_file_get_path(file);
+      
       strcpy(dest, PREFIX_SEL_FILE);
       strcat(dest, path);
       strncpy(pData->path, path, SIZE_PATH_MAX);
@@ -43,16 +44,12 @@ static void CbkBrowsePolar(GObject *aSource, GAsyncResult *aRes, gpointer aData)
 
 void BrowsePolar(GtkButton *aBtn, sBrowseData *aData)
 {
-  GtkFileDialog *dialog = gtk_file_dialog_new();
-
+  GtkFileChooserNative *dialog = gtk_file_chooser_native_new("Choose polar file", GTK_WINDOW(aData->win), GTK_FILE_CHOOSER_ACTION_OPEN, "_Select", "_Cancel");
   memset(aData, SIZE_PATH_MAX, 0);
   
-  gtk_file_dialog_open(dialog,
-		       aData->win,
-		       NULL,
-		       CbkBrowsePolar,
-		       aData);
-
+  g_signal_connect(dialog, "response", G_CALLBACK(CbkBrowsePolar), aData);
+  gtk_native_dialog_show(GTK_NATIVE_DIALOG(dialog));
+  
 }
 
 void SendPolar(GtkButton *aBtn, sSendData *aData)
