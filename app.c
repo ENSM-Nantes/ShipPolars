@@ -263,6 +263,32 @@ static void PRDrawPolar(GtkDrawingArea *aArea, cairo_t *aCr, int aWidth, int aHe
   PRDrawPoint(aCr, fosx, fosy, 2);
 }
 
+gboolean PRWaitToStart(gpointer aUserData)
+{
+  static gboolean isStarted = false;
+
+  if(!isStarted)
+    {
+      //Get nc file
+      if(0 == gAppData.sails.Open("polar.nc", "TotalSails_X", "TotalSails_Y"))
+	{
+	  gAppData.sails.Init("STW_kt", "TWS_kt", "TWA_deg");
+
+	  //Get Wind and speed from BC
+	  if(0 == gAppData.hCom.Connect(ENET_SERVER_HOST, 18304))
+	    {
+	      g_timeout_add(100, UpdateFromBC, &gAppData);
+	      g_timeout_add(500, UpdatePolar, &gAppData);
+	      isStarted = true;
+	    }
+	}
+      else
+	std::cout << "No polar file to read !" << std::endl;
+
+    }
+  return true;
+}
+
 void AbCreateBoxes(GtkWidget **aAbBodyBox, GtkWidget **aAbMainBox, GtkWidget **aAbTitleBox)
 {
   /*Box*/
@@ -277,6 +303,7 @@ void AbSetTitle(GtkWidget **aTitle)
   gtk_widget_set_halign(*aTitle, GTK_ALIGN_CENTER);
   gtk_widget_set_margin_bottom(*aTitle, 100);
 }
+
 
 void AbSetBoxes(GtkWidget **aAbBodyBox,GtkWidget **aAbMainBox,GtkWidget **aAbTitleBox,//Boxes
 	        GtkWidget **aTitle, GtkWidget **aInfos//Labels
@@ -385,23 +412,10 @@ void AppActivate(GApplication *app, gpointer aUserData)
   gtk_drawing_area_set_draw_func(GTK_DRAWING_AREA(prArea), PRDrawPolar, &gAppData, NULL);
   gtk_widget_set_margin_start(prArea, 500);  
   gAppData.area = prArea;
+
+  //Idle
+  g_timeout_add(1000, PRWaitToStart, NULL);
   
-  //Get nc file
-  if(0 == gAppData.sails.Open("polar.nc", "TotalSails_X", "TotalSails_Y"))
-    {
-      gAppData.sails.Init("STW_kt", "TWS_kt", "TWA_deg");
-
-      //Get Wind and speed from BC
-      if(0 == gAppData.hCom.Connect("172.31.85.145", 18304))
-	{
-	  g_timeout_add(100, UpdateFromBC, &gAppData);
-	  g_timeout_add(500, UpdatePolar, &gAppData);
-	}
-    }
-  else
-    std::cout << "No polar file to read !" << std::endl;
-  /*********/
-
   /*Polar Reader boxes*/
   PRSetBoxes(&prBodyBox,&prMainBox,&prTitleBox,//Boxes
 	     &prTitle,//Labels
