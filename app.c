@@ -98,14 +98,13 @@ void PISetBoxes(GtkWidget **aPiBodyBox,GtkWidget **aPiMainBox,GtkWidget **aPiTit
   gtk_box_append(GTK_BOX (*aPiMainBox), *aPiBodyBox);
 }
 
-sBrowseData* PISetBrowsePolarData(GtkWidget **aWin, GtkWidget **aLabelFileSelected, GtkWidget **aLogoBrowseCheck)
+sBrowseData* PISetBrowsePolarData(GtkWidget **aWin, GtkWidget **aLabelFileSelected, GtkWidget **aLogoBrowseCheck, char *aFilePath)
 {
   static sBrowseData brData = {0};
-  static char filePath[SIZE_PATH_MAX] = {0};
   
   /*Browse polar data*/
   brData.win = GTK_WINDOW (*aWin);
-  brData.path = filePath;
+  brData.path = aFilePath;
   brData.labelOut = GTK_LABEL(*aLabelFileSelected);
   brData.logo = *aLogoBrowseCheck;
   /********/
@@ -113,13 +112,12 @@ sBrowseData* PISetBrowsePolarData(GtkWidget **aWin, GtkWidget **aLabelFileSelect
   return &brData;
 }
 
-sSendData* PISetSendPolarData(GtkWidget **aLabelFileSent, GtkWidget **aLogoSendCheck)
+sSendData* PISetSendPolarData(GtkWidget **aLabelFileSent, GtkWidget **aLogoSendCheck,char *aFilePath)
 {
   static sSendData sdData = {0};
-  static char filePath[SIZE_PATH_MAX] = {0};
   
   /*Send polar data*/
-  sdData.path = filePath;
+  sdData.path = aFilePath;
   sdData.labelOut = GTK_LABEL(*aLabelFileSent);
   sdData.logo = *aLogoSendCheck;
   /********/
@@ -299,6 +297,7 @@ void AppActivate(GApplication *app, gpointer aUserData)
   GtkWidget *overlay, *win, *tabBox, *headerBox, *logo, *empty1;
   /********/
   /*Polar Injection variables*/
+  static char filePath[SIZE_PATH_MAX] = {0};
   sSendData *pSendData;
   sBrowseData *pBrowseData;
   static GtkWidget *piBodyBox, *piMainBox,  *piTitleBox, *piButtonBox, *piTextInBox, *piTextOutBox, *piLogoFileBox, *piLogoSendBox;
@@ -319,7 +318,7 @@ void AppActivate(GApplication *app, gpointer aUserData)
   /*Window*/
   win = gtk_application_window_new (GTK_APPLICATION (app));
   gtk_window_set_title (GTK_WINDOW (win), "Polar Management");
-  gtk_window_set_default_size (GTK_WINDOW (win), 1920, 1200);
+  gtk_window_set_default_size (GTK_WINDOW (win), 1920, 1080);
   gtk_window_set_resizable(GTK_WINDOW(win), TRUE);
   gtk_window_set_decorated(GTK_WINDOW(win), TRUE);
   /********/
@@ -361,8 +360,8 @@ void AppActivate(GApplication *app, gpointer aUserData)
 		  ); 
 
   /*Polar Injection Set Data Callback*/
-  pBrowseData = PISetBrowsePolarData(&win, &labelFileSelected, &logoBrowseCheck);
-  pSendData = PISetSendPolarData(&labelFileSent, &logoSendCheck);  
+  pBrowseData = PISetBrowsePolarData(&win, &labelFileSelected, &logoBrowseCheck, filePath);
+  pSendData = PISetSendPolarData(&labelFileSent, &logoSendCheck, filePath);  
   /********/
   
   /*Polar Injection Connect Callback*/
@@ -382,7 +381,7 @@ void AppActivate(GApplication *app, gpointer aUserData)
   //Cairo area drawing 
   prArea = gtk_drawing_area_new();
   gtk_drawing_area_set_content_width (GTK_DRAWING_AREA (prArea), 900);
-  gtk_drawing_area_set_content_height (GTK_DRAWING_AREA (prArea), 900);
+  gtk_drawing_area_set_content_height (GTK_DRAWING_AREA (prArea), 800);
   gtk_drawing_area_set_draw_func(GTK_DRAWING_AREA(prArea), PRDrawPolar, &gAppData, NULL);
   gtk_widget_set_margin_start(prArea, 500);  
   gAppData.area = prArea;
