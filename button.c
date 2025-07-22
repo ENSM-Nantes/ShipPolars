@@ -13,9 +13,9 @@ static void CbkBrowsePolar(GtkNativeDialog *aDialog, int aRes, gpointer aData)
     {
       char dest[SIZE_PATH_MAX+strlen(PREFIX_SEL_FILE)];
       GListModel *files = gtk_file_chooser_get_files(chooser);
-      sBrowseData *pData = aData;
+      sBrowseData *pData = (sBrowseData*)aData;
 
-      GFile *file = g_list_model_get_item(files, 0);
+      GFile *file = (GFile*)g_list_model_get_item(files, 0);
       char *path = g_file_get_path(file);
       
       strcpy(dest, PREFIX_SEL_FILE);
