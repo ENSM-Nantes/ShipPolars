@@ -10,8 +10,8 @@ libgtk-4-dev libenet-dev libnetcdf-dev
 ```g++ *.cpp *.c -o PolarManager `pkg-config --cflags --libs gtk4` -lm -lnetcdf -lenet```
    
 ## Use
-Put a polar file, named polar.nc in the same folder as the binary
-./PolarManager
+ - Put a polar file, named polar.nc in the same folder as the binary
+```./PolarManager```
 
 ## Example
 ![alt text](https://github.com/ENSM-Nantes/PolarInject/blob/main/res/screenshot.png)
