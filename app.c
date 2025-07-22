@@ -1,6 +1,7 @@
 #include "app.h"
 #include "button.h"
 #include "update.h"
+#include "pthread.h"
 
 //Global app data
 sAppData gAppData={{-120,-90,-60,-30,0,30,60,90,120},{0},{0},0,0,NULL};
@@ -263,11 +264,11 @@ static void PRDrawPolar(GtkDrawingArea *aArea, cairo_t *aCr, int aWidth, int aHe
   PRDrawPoint(aCr, fosx, fosy, 2);
 }
 
-gboolean PRWaitToStart(gpointer aUserData)
+void *PRWaitToStart(void *aData)
 {
-  static gboolean isStarted = false;
+  static bool isStarted = false;
 
-  if(!isStarted)
+  while(!isStarted)
     {
       //Get nc file
       if(0 == gAppData.sails.Open("polar.nc", "TotalSails_X", "TotalSails_Y"))
@@ -285,8 +286,10 @@ gboolean PRWaitToStart(gpointer aUserData)
       else
 	std::cout << "No polar file to read !" << std::endl;
 
+      sleep(2);
     }
-  return true;
+
+  return NULL;
 }
 
 void AbCreateBoxes(GtkWidget **aAbBodyBox, GtkWidget **aAbMainBox, GtkWidget **aAbTitleBox)
@@ -336,6 +339,7 @@ void AppActivate(GApplication *app, gpointer aUserData)
   static GtkWidget *prBodyBox, *prMainBox,  *prTitleBox;
   static GtkWidget *prTitle;
   static GtkWidget *prArea;
+  pthread_t tPrIdle; 
   /********/
   /*About variables*/
   static GtkWidget *abBodyBox, *abMainBox,  *abTitleBox;
@@ -414,7 +418,8 @@ void AppActivate(GApplication *app, gpointer aUserData)
   gAppData.area = prArea;
 
   //Idle
-  g_timeout_add(1000, PRWaitToStart, NULL);
+  pthread_create(&tPrIdle, NULL, PRWaitToStart, NULL);
+  pthread_detach(tPrIdle);
   
   /*Polar Reader boxes*/
   PRSetBoxes(&prBodyBox,&prMainBox,&prTitleBox,//Boxes
@@ -490,8 +495,6 @@ void AppActivate(GApplication *app, gpointer aUserData)
   gtk_widget_add_css_class(abMainBox, "textIn-label");
   gtk_widget_add_css_class(appBox, "back-template");
   /********/
-
-
   
   gtk_window_present (GTK_WINDOW (win));
 }
