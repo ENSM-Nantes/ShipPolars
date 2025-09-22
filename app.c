@@ -458,7 +458,7 @@ void *PRWaitToStart(void *aData)
 	  if(0 == gAppData.hCom.Connect(ENET_SERVER_HOST, 18304))
 	    {
 	      g_timeout_add(100, UpdateFromBC, &gAppData);
-	      g_timeout_add(500, UpdatePolar, &gAppData);
+	      g_timeout_add(100, UpdatePolar, &gAppData);
 	      isStarted = true;
 	    }
 	}
