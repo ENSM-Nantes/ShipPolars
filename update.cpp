@@ -23,7 +23,14 @@ gboolean UpdatePolar(gpointer aUserData)
 
   float fOsX = data->fOsX;
   float fOsY = data->fOsY;
-  float angle = atan2(-fOsX, fOsY) * 180.0 / M_PI;
+  float angle = (atan2(-fOsX, fOsY) * 180.0 / M_PI) + 90;
+
+  if(angle > 180) 
+  {
+    float delta = (270-angle);
+    angle=-90-delta;
+  }
+  
   float force = sqrt(fOsX*fOsX + fOsY*fOsY);
   std::string forceLabel = "\n\n\n\n Force : "+std::to_string(force)+" kN"+"\n\n Angle : "+std::to_string(angle)+" °";
 
