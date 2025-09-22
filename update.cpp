@@ -16,12 +16,21 @@ gboolean UpdatePolar(gpointer aUserData)
 
   data->fOsX = data->sails.GetForce('X', data->osMsg.GetSTW(), data->osMsg.GetAWS(), data->osMsg.GetAWA());
   data->fOsY = data->sails.GetForce('Y', data->osMsg.GetSTW(), data->osMsg.GetAWS(), data->osMsg.GetAWA());
-  
-  gtk_widget_queue_draw(data->area);
-    
+
+  gtk_widget_queue_draw(data->areaX);
+  gtk_widget_queue_draw(data->areaY);
+  gtk_widget_queue_draw(data->areaSum);
+
+  float fOsX = data->fOsX;
+  float fOsY = data->fOsY;
+  float angle = atan2(-fOsX, fOsY);
+  float force = sqrt(fOsX*fOsX + fOsY*fOsY);
+  std::string forceLabel = "\n\n\n\n Force : "+std::to_string(force)+" kN"+"\n\n Angle : "+std::to_string(angle)+" °";
+
+  gtk_label_set_text(data->fLabel, forceLabel.c_str());
+
   return true; 
 }
-
 
 
 gboolean UpdateFromBC(gpointer aUserData)

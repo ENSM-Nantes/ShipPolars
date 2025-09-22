@@ -12,7 +12,7 @@
 #define ANGLE_STEP_COUNT (13)
 #define FORCE_MAX (120)
 #define ANGLE_STEP_DEGRES (15)
-#define ENET_SERVER_HOST ("rpi5-somos-1.local")
+#define ENET_SERVER_HOST ("localhost")
 
 typedef struct
 {
@@ -21,7 +21,10 @@ typedef struct
   float forceY[ANGLE_STEP_COUNT];
   float fOsX;
   float fOsY;
-  GtkWidget *area;
+  GtkWidget *areaX;
+  GtkWidget *areaY;
+  GtkWidget *areaSum;
+  GtkLabel *fLabel;
   Nc sails;
   Com hCom;
   Message osMsg;
