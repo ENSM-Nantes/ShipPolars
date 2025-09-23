@@ -1,5 +1,8 @@
 # PolarManagement
- - Send polar file from Shiplify.io to BridgeCommand 
+ - Choose the polar vessel to read. The polar had to be present also in Bridge-Command, polar available for now :
+   - Copenhagen Ferry with one rotor flettner from NorsePower (30x5)
+   - Fake cargo Maersk with rotor flettner (18x3). Usefull only for debug
+   
  - Read a polar from a nc file and display it. The polar is refreshing from BridgeCommand according to "speed through water", "apparent wind speed" and "apparent wind direction".
    The position ship on the polar is alreadey displayed.
 
@@ -10,7 +13,7 @@ libgtk-4-dev libenet-dev libnetcdf-dev
 ```g++ *.cpp *.c -o PolarManager `pkg-config --cflags --libs gtk4` -lm -lnetcdf -lenet```
    
 ## Use
- - Put a polar file, named polar.nc in the same folder as the binary
+ - Copy/past the polar file corresponding to the scenario, rename it in polar.nc into the same folder as the binary
 ```./PolarManager```
 
 ## Example
