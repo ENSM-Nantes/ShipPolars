@@ -5,6 +5,8 @@
 #include <enet/enet.h>
 #include "message.h"
 
+#define ENET_SERVER_HOST ("localhost")
+
 class Com
 {
 

@@ -1,7 +1,7 @@
 #include "app.h"
 
 /*
-  **Polar Management 
+  **Polar Manager 
   **ENSM Nantes
   **Florent Richard
 
