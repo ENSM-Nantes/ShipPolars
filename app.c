@@ -3,6 +3,7 @@
 #include "update.h"
 #include "pthread.h"
 #include "about.h"
+#include "list.h"
 
 //Global app data
 sPrData gPrData={{-120,-90,-60,-30,0,30,60,90,120},{0},{0},0,0,NULL,NULL,NULL,NULL};
@@ -38,11 +39,22 @@ static void *AppWaitToStart(void *aData)
 }
 
 
+void AppScenarioList(GtkStringList **aScenarioItems, GtkWidget **aScenarioDropDown) 
+{
+  *aScenarioItems = gtk_string_list_new(NULL);
+  gtk_string_list_append(*aScenarioItems, "CopenhagenFerry - 1 rotor (Norse Power 30x5");
+  gtk_string_list_append(*aScenarioItems, "Fake Cargo Maersk - 2 rotors (18x3)");
+
+  *aScenarioDropDown = gtk_drop_down_new(G_LIST_MODEL(*aScenarioItems), NULL);
+  g_signal_connect(*aScenarioDropDown, "notify::selected", G_CALLBACK(SelectScenario), NULL);
+}
 
 void AppActivate(GApplication *app, gpointer aUserData)
 {
   /*Generic App variables*/
   GtkWidget *overlay, *win, *tabBox, *headerBox, *logo, *empty1;
+  static GtkStringList *scenarioListItems;
+  static GtkWidget *scenarioListDropDown;
   /********/
   /*Polar Injection variables*/
   static char filePath[SIZE_PATH_MAX] = {0};
@@ -50,8 +62,9 @@ void AppActivate(GApplication *app, gpointer aUserData)
   sBrowseData *pBrowseData;
   static GtkWidget *piBodyBox, *piMainBox,  *piTitleBox, *piButtonBox, *piTextInBox, *piTextOutBox, *piLogoFileBox, *piLogoSendBox;
   static GtkWidget *piShiplifyBtn, *piBrowseBtn, *piSendBtn;
-  static GtkWidget *empty2, *empty3, *piTitle, *labelShiplify, *labelPolar, *labelSend, *labelFileSelected, *labelFileSent, *labelFooter;
+  static GtkWidget *empty2, *empty3, *piTitle, *labelShiplify, *labelPolar, *labelSend, *labelFileSelected, *labelFileSent, *labelFooter, *labelScenario;
   static GtkWidget *logoBrowseCheck, *logoSendCheck, *logoShiplify;
+
   /********/
   /*Polar Reader variables*/
   static GtkWidget *prBodyBox, *prMainBox, *prTitleBox, *prLeftBox, *prMidBox, *prRightBox;
@@ -87,11 +100,14 @@ void AppActivate(GApplication *app, gpointer aUserData)
   gtk_box_append(GTK_BOX (headerBox), empty1);
   /********/
 
-
   /*Set App Thread*/
   pthread_create(&tPrIdle, NULL, AppWaitToStart, NULL);
   pthread_detach(tPrIdle);
   /********/
+
+   //App Scenario list
+  AppScenarioList(&scenarioListItems, &scenarioListDropDown);
+ 
   
   //Polar Injection  create boxes
   PICreateBoxes(&piBodyBox, &piMainBox, &piTitleBox, &piButtonBox, &piTextInBox, &piTextOutBox, &piLogoFileBox, &piLogoSendBox);
@@ -104,15 +120,15 @@ void AppActivate(GApplication *app, gpointer aUserData)
 
   //Polar Injection buttons
   PISetButtons(&piShiplifyBtn, &piSendBtn, &piBrowseBtn) ;
-
+ 
   //Polar Injection labels
-  PISetLabels(&labelFileSent, &labelFileSelected, &labelShiplify, &labelPolar, &labelSend, &empty2, &empty3);
+  PISetLabels(&labelFileSent, &labelFileSelected, &labelShiplify, &labelPolar, &labelSend, &empty2, &empty3, &labelScenario);
 
   /*Polar Injection boxes*/
   PISetBoxes(&piBodyBox, &piMainBox, &piTitleBox, &piButtonBox, &piTextInBox, &piTextOutBox, &piLogoFileBox, &piLogoSendBox,//Boxes
-	     &piShiplifyBtn, &piBrowseBtn, &piSendBtn,//Buttons
+	     &piShiplifyBtn, &piBrowseBtn, &piSendBtn, &scenarioListDropDown,//Buttons/Lists
 	     &logoBrowseCheck, &logoSendCheck,//Logos
-	     &empty2, &piTitle, &labelShiplify, &labelPolar, &labelSend, &labelFileSelected, &labelFileSent//Labels
+	     &empty2, &piTitle, &labelShiplify, &labelPolar, &labelSend, &labelFileSelected, &labelFileSent, &labelScenario//Labels
 	     ); 
 
   /*Polar Injection Set Data Callback*/

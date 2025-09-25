@@ -19,7 +19,7 @@ typedef struct
 
 
 void AppActivate(GApplication *app, gpointer aUserData);
-
+void AppScenarioList(GtkStringList **aScenarioItems, GtkWidget **aScenarioDropDown);
 
 
 
