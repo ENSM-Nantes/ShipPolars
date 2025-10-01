@@ -5,12 +5,14 @@
 
 Nc::Nc(void)
 {
+  mIdPolarFile = 0;
   mDimCountX = 0;
   mDimCountY = 0;
 }
 
 Nc::Nc(const std::string aPolarFile, std::string aVarNameX, std::string aVarNameY)
 {
+  mIdPolarFile = 0;
   mDimCountX = 0;
   mDimCountY = 0;
 
@@ -62,6 +64,12 @@ int Nc::Open(const std::string aPolarFile, std::string aVarNameX, std::string aV
     }
 
   return -1;
+}
+
+void Nc::Close(void)
+{
+  if(mIdPolarFile)
+    nc_close(mIdPolarFile);
 }
 
 int Nc::Init(std::string aSpeedWaterVarName, std::string aWindSpeedVarName, std::string aWindAngleVarName)

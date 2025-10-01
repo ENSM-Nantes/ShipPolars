@@ -48,8 +48,20 @@ void BrowsePolar(GtkButton *aBtn, sBrowseData *aData)
   memset(aData, SIZE_PATH_MAX, 0);
   
   g_signal_connect(dialog, "response", G_CALLBACK(CbkBrowsePolar), aData);
-  gtk_native_dialog_show(GTK_NATIVE_DIALOG(dialog));
+  gtk_native_dialog_show(GTK_NATIVE_DIALOG(dialog));  
+}
+
+void RemovePolar(void)
+{
+  char cmd[SIZE_CMD_MAX] = {0};
+  char buffer[4] = {0};
   
+  strcpy(cmd, "rm polar.nc");
+
+  FILE *fp = NULL;
+  fp = popen(cmd, "r");
+
+  if(fp != NULL) pclose(fp);
 }
 
 void SendPolar(GtkButton *aBtn, sSendData *aData)

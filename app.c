@@ -3,50 +3,87 @@
 #include "update.h"
 #include "pthread.h"
 #include "about.h"
-#include "list.h"
 
 //Global app data
 sPrData gPrData={{-120,-90,-60,-30,0,30,60,90,120},{0},{0},0,0,NULL,NULL,NULL,NULL};
 sAppData gAppData;
 
 
-static void *AppWaitToStart(void *aData)
+static void *AppThreadManagement(void *aData)
 {
-  static bool isStarted = false;
-
-  while(!isStarted)
+  bool isNetStarted = false, isNcLoaded = false;
+  char filePathSave[SIZE_PATH_MAX]={0};
+  sPolarData *pPolarData = static_cast<sPolarData*>(aData);
+  guint idUpdateBC = 0, idUpdatePolar = 0;
+  
+  /*Start Enet server*/
+  while(!isNetStarted)
     {
-      //Get nc file
-      if(0 == gAppData.sails.Open("polar.nc", "TotalSails_X", "TotalSails_Y"))
+      if(0 == gAppData.hCom.Connect(ENET_SERVER_HOST, 18304))
 	{
-	  gAppData.sails.Init("STW_kt", "TWS_kt", "TWA_deg");
+	  isNetStarted = true;
+	}
 
-	  //Get Wind and speed from BC
-	  if(0 == gAppData.hCom.Connect(ENET_SERVER_HOST, 18304))
+      //Pause the thread
+      sleep(1);
+    }
+
+  /*Nc Management*/  
+  while(true)
+    {
+      //Lock data, also use in list.c
+      pthread_mutex_lock(&pPolarData->lock);
+
+      //Polar file update
+      if(isNcLoaded && (0 != strcmp(filePathSave, pPolarData->fileName)))
+	{
+	  gAppData.sails.Close();
+	  std::cout << "Polar file closed : " << filePathSave << std::endl;
+	  memset(filePathSave, 0, SIZE_PATH_MAX);
+	  isNcLoaded = false;
+
+	  //Remove periodic callback
+	  if(idUpdateBC) g_source_remove(idUpdateBC);
+	  if(idUpdatePolar) g_source_remove(idUpdatePolar);
+	}
+      
+      //Get nc file
+      if(!isNcLoaded && (0 == gAppData.sails.Open(pPolarData->fileName, "TotalSails_X", "TotalSails_Y")))
+	{
+	  if(0 ==  gAppData.sails.Init("STW_kt", "TWS_kt", "TWA_deg"))
 	    {
-	      g_timeout_add(100, UpdateFromBC, &gAppData);
-	      g_timeout_add(100, UpdatePolar, &gAppData);
-	      isStarted = true;
+	      std::cout << "Polar file loaded : " << pPolarData->fileName << std::endl;
+
+	      //Add peridic update callback
+	      idUpdateBC = g_timeout_add(100, UpdateFromBC, &gAppData);
+	      idUpdatePolar = g_timeout_add(100, UpdatePolar, &gAppData);
+
+	      isNcLoaded = true;
 	    }
 	}
-      else
-	std::cout << "No polar file to read !" << std::endl;
 
+      //Save polar file currently open
+      strcpy(filePathSave, pPolarData->fileName);
+
+      //Unlock data
+      pthread_mutex_unlock(&pPolarData->lock);
+
+      //Pause the thread 
       sleep(2);
     }
 
   return NULL;
 }
 
-
-void AppScenarioList(GtkStringList **aScenarioItems, GtkWidget **aScenarioDropDown) 
+void AppScenarioList(GtkStringList **aScenarioItems, GtkWidget **aScenarioDropDown, sPolarData *aPolarData) 
 {
   *aScenarioItems = gtk_string_list_new(NULL);
-  gtk_string_list_append(*aScenarioItems, "CopenhagenFerry - 1 rotor (Norse Power 30x5");
+  gtk_string_list_append(*aScenarioItems, "No Scenario");
+  gtk_string_list_append(*aScenarioItems, "CopenhagenFerry - 1 rotor (30x5)");
   gtk_string_list_append(*aScenarioItems, "Fake Cargo Maersk - 2 rotors (18x3)");
 
   *aScenarioDropDown = gtk_drop_down_new(G_LIST_MODEL(*aScenarioItems), NULL);
-  g_signal_connect(*aScenarioDropDown, "notify::selected", G_CALLBACK(SelectScenario), NULL);
+  g_signal_connect(*aScenarioDropDown, "notify::selected", G_CALLBACK(SelectScenario), aPolarData);
 }
 
 void AppActivate(GApplication *app, gpointer aUserData)
@@ -57,21 +94,20 @@ void AppActivate(GApplication *app, gpointer aUserData)
   static GtkWidget *scenarioListDropDown;
   /********/
   /*Polar Injection variables*/
-  static char filePath[SIZE_PATH_MAX] = {0};
+  static char filePath[SIZE_PATH_MAX]={0};
   sSendData *pSendData;
   sBrowseData *pBrowseData;
   static GtkWidget *piBodyBox, *piMainBox,  *piTitleBox, *piButtonBox, *piTextInBox, *piTextOutBox, *piLogoFileBox, *piLogoSendBox;
-  static GtkWidget *piShiplifyBtn, *piBrowseBtn, *piSendBtn;
-  static GtkWidget *empty2, *empty3, *piTitle, *labelShiplify, *labelPolar, *labelSend, *labelFileSelected, *labelFileSent, *labelFooter, *labelScenario;
+  static GtkWidget *piShiplifyBtn, *piBrowseBtn, *piSendBtn, *piRemoveBtn;
+  static GtkWidget *empty2, *empty3, *empty4, *empty5, *piTitle, *labelShiplify, *labelPolar, *labelSend, *labelFileSelected, *labelFileSent, *labelFooter, *labelScenario, *labelOr, *labelRemove;
   static GtkWidget *logoBrowseCheck, *logoSendCheck, *logoShiplify;
-
   /********/
   /*Polar Reader variables*/
   static GtkWidget *prBodyBox, *prMainBox, *prTitleBox, *prLeftBox, *prMidBox, *prRightBox;
   static GtkWidget *prTitle;
   static GtkWidget *labelPolarX, *labelPolarY, *labelVector, *labelAngleForce;
   static GtkWidget *prPolarXArea, *prPolarYArea, *prSumArea;
-  pthread_t tPrIdle; 
+  static pthread_t tPrIdle; 
   /********/
   /*About variables*/
   static GtkWidget *abBodyBox, *abMainBox,  *abTitleBox;
@@ -100,14 +136,18 @@ void AppActivate(GApplication *app, gpointer aUserData)
   gtk_box_append(GTK_BOX (headerBox), empty1);
   /********/
 
+  //App Scenario list
+  sPolarData *polarData = (sPolarData*)malloc(sizeof(sPolarData));
+  polarData->sizeFileName = SIZE_MAX_SCENARIO_NAME;
+  polarData->fileName = static_cast<char*>(malloc(polarData->sizeFileName));
+  strcpy(polarData->fileName, "polar.nc");
+  pthread_mutex_init(&polarData->lock, nullptr);
+  AppScenarioList(&scenarioListItems, &scenarioListDropDown, polarData); 
+
   /*Set App Thread*/
-  pthread_create(&tPrIdle, NULL, AppWaitToStart, NULL);
+  pthread_create(&tPrIdle, nullptr, AppThreadManagement, polarData);
   pthread_detach(tPrIdle);
   /********/
-
-   //App Scenario list
-  AppScenarioList(&scenarioListItems, &scenarioListDropDown);
- 
   
   //Polar Injection  create boxes
   PICreateBoxes(&piBodyBox, &piMainBox, &piTitleBox, &piButtonBox, &piTextInBox, &piTextOutBox, &piLogoFileBox, &piLogoSendBox);
@@ -119,16 +159,16 @@ void AppActivate(GApplication *app, gpointer aUserData)
   PISetLogo(&logo, &logoShiplify, &logoBrowseCheck, &logoSendCheck) ;
 
   //Polar Injection buttons
-  PISetButtons(&piShiplifyBtn, &piSendBtn, &piBrowseBtn) ;
+  PISetButtons(&piShiplifyBtn, &piSendBtn, &piBrowseBtn, &piRemoveBtn) ;
  
   //Polar Injection labels
-  PISetLabels(&labelFileSent, &labelFileSelected, &labelShiplify, &labelPolar, &labelSend, &empty2, &empty3, &labelScenario);
+  PISetLabels(&labelFileSent, &labelFileSelected, &labelShiplify, &labelPolar, &labelSend, &empty2, &empty3, &empty4, &empty5, &labelScenario, &labelOr, &labelRemove);
 
   /*Polar Injection boxes*/
   PISetBoxes(&piBodyBox, &piMainBox, &piTitleBox, &piButtonBox, &piTextInBox, &piTextOutBox, &piLogoFileBox, &piLogoSendBox,//Boxes
-	     &piShiplifyBtn, &piBrowseBtn, &piSendBtn, &scenarioListDropDown,//Buttons/Lists
+	     &piShiplifyBtn, &piBrowseBtn, &piSendBtn, &scenarioListDropDown, &piRemoveBtn,//Buttons/Lists
 	     &logoBrowseCheck, &logoSendCheck,//Logos
-	     &empty2, &piTitle, &labelShiplify, &labelPolar, &labelSend, &labelFileSelected, &labelFileSent, &labelScenario//Labels
+	     &empty2, &empty3, &empty4, &empty5, &piTitle, &labelShiplify, &labelPolar, &labelSend, &labelFileSelected, &labelFileSent, &labelScenario, &labelOr, &labelRemove//Labels
 	     ); 
 
   /*Polar Injection Set Data Callback*/
@@ -140,6 +180,7 @@ void AppActivate(GApplication *app, gpointer aUserData)
   g_signal_connect(piShiplifyBtn, "clicked", G_CALLBACK(OpenShiplify), NULL);
   g_signal_connect(piBrowseBtn, "clicked", G_CALLBACK(BrowsePolar), pBrowseData);
   g_signal_connect(piSendBtn, "clicked", G_CALLBACK(SendPolar), pSendData);
+  g_signal_connect(piRemoveBtn, "clicked", G_CALLBACK(RemovePolar), NULL);
   /********/
 
   //Polar Reader create boxes
@@ -203,7 +244,7 @@ void AppActivate(GApplication *app, gpointer aUserData)
   GtkWidget *stack = gtk_stack_new();
   gtk_stack_set_transition_type(GTK_STACK(stack), GTK_STACK_TRANSITION_TYPE_SLIDE_LEFT_RIGHT);
 
-  gtk_stack_add_titled(GTK_STACK(stack), piMainBox, "tab1", "Polar Injection");
+  gtk_stack_add_titled(GTK_STACK(stack), piMainBox, "tab1", "Polar Selection");
   gtk_stack_add_titled(GTK_STACK(stack), prMainBox, "tab2", "Polar Reader");
   gtk_stack_add_titled(GTK_STACK(stack), abMainBox, "tab3", "About");
   

@@ -17,7 +17,8 @@ class Nc
   int Open(const std::string aPolarFile, std::string aVarNameX, std::string aVarNameY);
   int Init(std::string aSpeedWaterVarName, std::string aWindSpeedVarName, std::string aWindAngleVarName);
   float GetForce(char aAxe, float aStwValue, float aTwsValue, float aTwaValue);
-
+  void Close(void);
+  
  private:
 
   int mIdPolarFile;
