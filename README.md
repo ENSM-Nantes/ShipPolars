@@ -10,7 +10,7 @@
 libgtk-4-dev libenet-dev libnetcdf-dev
 
 ## Build
-```g++ *.cpp *.c -o PolarManager `pkg-config --cflags --libs gtk4` -lm -lnetcdf -lenet```
+```./build.sh```
    
 ## Use
  - Copy/past the polar file corresponding to the scenario, rename it in polar.nc into the same folder as the binary
