@@ -3,6 +3,7 @@
 #include "update.h"
 #include "pthread.h"
 #include "about.h"
+#include "sail.h"
 
 //Global app data
 sPrData gPrData={{-120,-90,-60,-30,0,30,60,90,120},{0},{0},0,0,NULL,NULL,NULL,NULL};
@@ -112,6 +113,10 @@ void AppActivate(GApplication *app, gpointer aUserData)
   /*About variables*/
   static GtkWidget *abBodyBox, *abMainBox,  *abTitleBox;
   static GtkWidget *abTitle, *abInfos;
+  /********/
+  /*Sail Management variables*/
+  static GtkWidget *saBodyBox, *saMainBox,  *saTitleBox;
+  static GtkWidget *saTitle;
   /********/
   
   /*Window*/
@@ -233,12 +238,25 @@ void AppActivate(GApplication *app, gpointer aUserData)
 
   //About title
   AbSetTitle(&abTitle);
-  abInfos = gtk_label_new("\tName : Polar Manager\n\r\tVersion : v1.1\n\r\tProject : SOMOS Project 2025\n\r\tOwner : ENSM-Nantes\n\r\tContact : florent.richard@supmaritime.fr\n\r\tWebsite : somos-project.fr");
+  abInfos = gtk_label_new("\tName : Polar Manager\n\r\tVersion : v1.2\n\r\tProject : SOMOS Project 2026\n\r\tOwner : ENSM-Nantes\n\r\tContact : florent.richard@supmaritime.fr\n\r\tWebsite : somos-project.fr");
   
   /*About boxes*/
   AbSetBoxes(&abBodyBox,&abMainBox,&abTitleBox,//Boxes
 	     &abTitle,&abInfos//Labels
 	     );
+
+
+  //Sail management create boxes
+  SaCreateBoxes(&saBodyBox, &saMainBox, &saTitleBox);
+
+  //Sail management title
+  SaSetTitle(&saTitle);
+  
+  /*Sail management boxes*/
+  SaSetBoxes(&saBodyBox,&saMainBox,&saTitleBox,//Boxes
+	     &saTitle//Labels
+	     );
+
   
   /*Tab menu*/
   GtkWidget *stack = gtk_stack_new();
@@ -246,7 +264,8 @@ void AppActivate(GApplication *app, gpointer aUserData)
 
   gtk_stack_add_titled(GTK_STACK(stack), piMainBox, "tab1", "Polar Selection");
   gtk_stack_add_titled(GTK_STACK(stack), prMainBox, "tab2", "Polar Reader");
-  gtk_stack_add_titled(GTK_STACK(stack), abMainBox, "tab3", "About");
+  gtk_stack_add_titled(GTK_STACK(stack), saMainBox, "tab3", "Sail Management");
+  gtk_stack_add_titled(GTK_STACK(stack), abMainBox, "tab4", "About");
   
   GtkWidget *switcher = gtk_stack_switcher_new();
   gtk_stack_switcher_set_stack(GTK_STACK_SWITCHER(switcher), GTK_STACK(stack));
@@ -269,7 +288,7 @@ void AppActivate(GApplication *app, gpointer aUserData)
   /*Overlay*/
   overlay = gtk_overlay_new();
   //Footer overlay, display on all pages
-  labelFooter = gtk_label_new("Polar Manager v1.1 - SOMOS Project 2025 - ENSM Nantes");
+  labelFooter = gtk_label_new("Polar Manager v1.2 - SOMOS Project 2026 - ENSM Nantes");
   gtk_widget_set_halign(labelFooter, GTK_ALIGN_END);
   gtk_widget_set_valign(labelFooter, GTK_ALIGN_END);
       
@@ -290,6 +309,7 @@ void AppActivate(GApplication *app, gpointer aUserData)
   gtk_widget_add_css_class(piTitle, "title-label");
   gtk_widget_add_css_class(prTitle, "title-label");
   gtk_widget_add_css_class(abTitle, "title-label");
+  gtk_widget_add_css_class(saTitle, "title-label");
   //gtk_widget_add_css_class(mainBox, "back-template");
   gtk_widget_add_css_class(piTextInBox, "textIn-label");
   gtk_widget_add_css_class(piTextOutBox, "textOut-label");

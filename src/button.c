@@ -96,3 +96,15 @@ void SendPolar(GtkButton *aBtn, sSendData *aData)
       pclose(fp);
     }
 }
+
+void OnOffRotor(void)
+{
+  //Send a message to BC to stop Rotor
+
+}
+
+void ChangeRot(void)
+{
+  //Send a message to BC to change direction rotation Rotor
+
+}

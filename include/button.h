@@ -13,5 +13,7 @@ void OpenShiplify(void);
 void BrowsePolar(GtkButton *aBtn, sBrowseData *aData);
 void SendPolar(GtkButton *aBtn, sSendData *aData);
 void RemovePolar(void);
+void OnOffRotor(void);
+void ChangeRot(void);
 
 #endif
