@@ -1,3 +1,4 @@
+#include "app.h"
 #include "sail.h"
 #include "button.h"
 
@@ -17,7 +18,7 @@ void SaSetTitle(GtkWidget **aTitle)
 }
 
 
-void SaSetRotorBox(GtkWidget **aRotorBox, GtkWidget **aOnOffBtn, GtkWidget **aChangeRotationBtn)
+void SaSetRotorBox(GtkWidget **aRotorBox, GtkWidget **aOnOffBtn, GtkWidget **aChangeRotationBtn, void *aAppData)
 {
   *aOnOffBtn = gtk_button_new_with_label ("Power On/off");
   *aChangeRotationBtn = gtk_button_new_with_label ("Change rotation direction");  
@@ -37,18 +38,19 @@ void SaSetRotorBox(GtkWidget **aRotorBox, GtkWidget **aOnOffBtn, GtkWidget **aCh
   gtk_widget_set_valign(*aChangeRotationBtn, GTK_ALIGN_START);
  
   
-  g_signal_connect(aOnOffBtn, "clicked", G_CALLBACK(OnOffRotor), NULL);
-  g_signal_connect(aChangeRotationBtn, "clicked", G_CALLBACK(ChangeRot), NULL);
+  g_signal_connect(*aOnOffBtn, "clicked", G_CALLBACK(OnOffRotor), aAppData);
+  g_signal_connect(*aChangeRotationBtn, "clicked", G_CALLBACK(ChangeRot), aAppData);
 
 }
 
 void SaSetBoxes(GtkWidget **aSaBodyBox,GtkWidget **aSaMainBox,GtkWidget **aSaTitleBox,//Boxes
-	        GtkWidget **aTitle//Labels
+	        GtkWidget **aTitle,//Labels
+		void *aAppData
 		) 
 {
   static GtkWidget *sailTabBox, *rotorBox, *sail2Box, *sail3Box, *sail4Box, *sail5Box, *sail6Box;
   static GtkWidget *onOffBtn, *changeRotationBtn;
-  
+
   gtk_box_append(GTK_BOX (*aSaTitleBox), *aTitle);
 
   rotorBox = gtk_box_new(GTK_ORIENTATION_VERTICAL, 10);
@@ -59,7 +61,7 @@ void SaSetBoxes(GtkWidget **aSaBodyBox,GtkWidget **aSaMainBox,GtkWidget **aSaTit
   sail6Box = gtk_box_new(GTK_ORIENTATION_VERTICAL, 10);
 
   //Rotor section
-  SaSetRotorBox(&rotorBox, &onOffBtn, &changeRotationBtn);
+  SaSetRotorBox(&rotorBox, &onOffBtn, &changeRotationBtn, aAppData);
 
   
   /*Tab menu*/

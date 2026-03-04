@@ -254,8 +254,8 @@ void AppActivate(GApplication *app, gpointer aUserData)
   
   /*Sail management boxes*/
   SaSetBoxes(&saBodyBox,&saMainBox,&saTitleBox,//Boxes
-	     &saTitle//Labels
-	     );
+	     &saTitle,//Labels
+	     &gAppData);
 
   
   /*Tab menu*/

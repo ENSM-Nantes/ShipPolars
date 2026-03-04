@@ -37,7 +37,7 @@ int Com::Connect(std::string aServerName, unsigned int aPort)
   enet_address_set_host(&mWiAddress, aServerName.c_str());
   mWiAddress.port = aPort;
 
-  mWiPeer = enet_host_connect(mWiHandler, &mWiAddress, 2, 15);
+  mWiPeer = enet_host_connect(mWiHandler, &mWiAddress, 2, 15);//0x0F for WI
 
   if(NULL == mWiPeer)
     {

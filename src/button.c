@@ -1,4 +1,5 @@
 #include "button.h"
+#include "app.h"
 
 void OpenShiplify(void)
 {
@@ -97,13 +98,33 @@ void SendPolar(GtkButton *aBtn, sSendData *aData)
     }
 }
 
-void OnOffRotor(void)
+void OnOffRotor(void *aAppData)
 {
-  //Send a message to BC to stop Rotor
+  static std::string msg;  
+  static bool isClicked = false;
+  sAppData *pAppData = (sAppData*)aAppData;
+
+  msg.clear();
+  msg = "RT";
+
+  if(!isClicked)
+    {
+      isClicked = true;
+      msg += "1";
+    }
+  else
+    {
+      isClicked = false;  
+      msg += "0";
+    }
+  
+  std::cout << "OnOff button clicked, msg : " << msg << std::endl;
+
+  pAppData->hCom.SendMessage(msg);
 
 }
 
-void ChangeRot(void)
+void ChangeRot(void *aAppData)
 {
   //Send a message to BC to change direction rotation Rotor
 
