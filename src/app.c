@@ -246,16 +246,21 @@ void AppActivate(GApplication *app, gpointer aUserData)
 	     );
 
 
-  //Sail management create boxes
-  SaCreateBoxes(&saBodyBox, &saMainBox, &saTitleBox);
+  while(!gAppData.hCom.IsConnected())
+    {
+      //Sail management create boxes
+      SaCreateBoxes(&saBodyBox, &saMainBox, &saTitleBox);
 
-  //Sail management title
-  SaSetTitle(&saTitle);
+      //Sail management title
+      SaSetTitle(&saTitle);
   
-  /*Sail management boxes*/
-  SaSetBoxes(&saBodyBox,&saMainBox,&saTitleBox,//Boxes
-	     &saTitle,//Labels
-	     &gAppData);
+      /*Sail management boxes*/
+      SaSetBoxes(&saBodyBox,&saMainBox,&saTitleBox,//Boxes
+		 &saTitle,//Labels
+		 &gAppData);
+
+      sleep(1);
+    }
 
   
   /*Tab menu*/

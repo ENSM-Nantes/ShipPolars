@@ -7,6 +7,7 @@ Com::Com()
   mWiHandler = NULL;
   mWiAddress = {0};
   mWiPeer = NULL;
+  mIsConnect = false;
 }
 
 Com::~Com()
@@ -49,6 +50,7 @@ int Com::Connect(std::string aServerName, unsigned int aPort)
   if(enet_host_service(mWiHandler, &event, 1000) > 0 && event.type == ENET_EVENT_TYPE_CONNECT) {
     std::cout << "Connect to the server" << std::endl;
     enet_host_flush(mWiHandler);
+    mIsConnect = true;
   }
   else {
     std::cout << "Not connected --> Reset !" << std::endl;
@@ -88,9 +90,11 @@ int Com::SendMessage(const std::string& aMsg, bool aIsReliable)
         packetFlag = ENET_PACKET_FLAG_RELIABLE;
 
       ENetPacket* packet = enet_packet_create(aMsg.c_str(), aMsg.length(), packetFlag);
+      std::cout << "Msg sent ! " << std::endl;
       enet_peer_send(mWiPeer, 0, packet);
       enet_host_flush(mWiHandler);
       ret = 0;
+
     }
   
   return ret;
