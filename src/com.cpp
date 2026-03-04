@@ -82,6 +82,7 @@ int Com::SendMessage(const std::string& aMsg, bool aIsReliable)
 
   if(aMsg.length() > 0)
     {
+      std::cout << "Msg length : " << aMsg << std::endl;
       enet_uint32 packetFlag = 0;
       if (aIsReliable)
         packetFlag = ENET_PACKET_FLAG_RELIABLE;
