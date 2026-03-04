@@ -43,7 +43,11 @@ gboolean UpdateFromBC(gpointer aUserData)
 {
   sAppData *data = (sAppData*)aUserData;
 
+  pthread_mutex_lock(&data->lock);
+  
   data->hCom.WaitMessage(90, data->osMsg);	  
-      
+
+  pthread_mutex_unlock(&data->lock);
+  
   return true;
 }

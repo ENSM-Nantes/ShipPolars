@@ -17,7 +17,7 @@ typedef struct
   Com hCom;
   Message osMsg;
   sPrData *prData;
-  
+  pthread_mutex_t lock;  
 }sAppData;
 
 
