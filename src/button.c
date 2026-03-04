@@ -120,11 +120,14 @@ void OnOffRotor(void *aAppData)
   
   std::cout << "OnOff button clicked, msg : " << msg << std::endl;
 
-  pthread_mutex_lock(&pAppData->lock);
+  if(pAppData != NULL)
+    {
+      pthread_mutex_lock(&pAppData->lock);
+      
+      pAppData->hCom.SendMessage(msg);
   
-  pAppData->hCom.SendMessage(msg);
-
-  pthread_mutex_unlock(&pAppData->lock);
+      pthread_mutex_unlock(&pAppData->lock);
+    }
 }
 
 void ChangeRot(void *aAppData)
