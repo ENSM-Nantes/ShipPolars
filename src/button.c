@@ -122,16 +122,16 @@ void OnOffRotor(void *aAppData)
 
   if(pAppData != NULL)
     {
-      while(EBUSY == pthread_mutex_trylock(&pAppData->lock))
+      /* while(EBUSY == pthread_mutex_trylock(&pAppData->lock))
 	{
 
-	}
+	}*/
 
-      pthread_mutex_lock(&pAppData->lock);
+      //pthread_mutex_lock(&pAppData->lock);
 	  
       pAppData->hCom.SendMessage(msg);
   
-      pthread_mutex_unlock(&pAppData->lock);
+      //pthread_mutex_unlock(&pAppData->lock);
     }
 }
 

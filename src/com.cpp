@@ -26,7 +26,7 @@ int Com::Connect(std::string aServerName, unsigned int aPort)
       return -1;
     }
 
-  mWiHandler = enet_host_create(NULL, 1, 2, 0, 0);
+  mWiHandler = enet_host_create(NULL, 2, 2, 0, 0);
 
   if(NULL == mWiHandler)
     {
@@ -38,7 +38,7 @@ int Com::Connect(std::string aServerName, unsigned int aPort)
   enet_address_set_host(&mWiAddress, aServerName.c_str());
   mWiAddress.port = aPort;
 
-  mWiPeer = enet_host_connect(mWiHandler, &mWiAddress, 2, 15);//0x0F for WI
+  mWiPeer = enet_host_connect(mWiHandler, &mWiAddress, ENET_PROTOCOL_MAXIMUM_CHANNEL_COUNT, 15);//0x0F for WI
 
   if(NULL == mWiPeer)
     {
@@ -92,7 +92,7 @@ int Com::SendMessage(const std::string& aMsg, bool aIsReliable)
       ENetPacket* packet = enet_packet_create(aMsg.c_str(), aMsg.length(), packetFlag);
       std::cout << "Msg sent ! " << std::endl;
       enet_peer_send(mWiPeer, 0, packet);
-      enet_host_flush(mWiHandler);
+      //enet_host_flush(mWiHandler);
       ret = 0;
 
     }

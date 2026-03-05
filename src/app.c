@@ -248,19 +248,21 @@ void AppActivate(GApplication *app, gpointer aUserData)
 
   while(!gAppData.hCom.IsConnected())
     {
-      //Sail management create boxes
-      SaCreateBoxes(&saBodyBox, &saMainBox, &saTitleBox);
-
-      //Sail management title
-      SaSetTitle(&saTitle);
-  
-      /*Sail management boxes*/
-      SaSetBoxes(&saBodyBox,&saMainBox,&saTitleBox,//Boxes
-		 &saTitle,//Labels
-		 &gAppData);
-
-      sleep(1);
+       sleep(1);
     }
+
+  //Sail management create boxes
+  SaCreateBoxes(&saBodyBox, &saMainBox, &saTitleBox);
+
+  //Sail management title
+  SaSetTitle(&saTitle);
+  
+  /*Sail management boxes*/
+  SaSetBoxes(&saBodyBox,&saMainBox,&saTitleBox,//Boxes
+	     &saTitle,//Labels
+	     &gAppData);
+
+     
 
   
   /*Tab menu*/
