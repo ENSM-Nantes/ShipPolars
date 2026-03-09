@@ -1,5 +1,6 @@
 #include "button.h"
 #include "app.h"
+#include "sail.h"
 
 void OpenShiplify(void)
 {
@@ -98,45 +99,89 @@ void SendPolar(GtkButton *aBtn, sSendData *aData)
     }
 }
 
-void OnOffRotor(void *aAppData)
+gboolean OnOffReactivateButton(gpointer aData)
+{
+  GtkWidget *button = GTK_WIDGET(aData);
+  gtk_widget_set_sensitive(GTK_WIDGET(button), TRUE);
+  gtk_button_set_label(GTK_BUTTON(button), "Power On/off");
+  return FALSE;
+}
+
+gboolean OnOffReactivateLabel(gpointer aData)
+{
+  GtkWidget *label = GTK_WIDGET(aData);
+  gtk_label_set_text(GTK_LABEL(label), " ");
+  
+  return FALSE;
+}
+
+void OnOffRotor(GtkButton *aBtn, gpointer aRotInfos)
 {
   static std::string msg;  
   static bool isClicked = false;
-  sAppData *pAppData = (sAppData*)aAppData;
-
+  sRotInfos *pRotInfos = static_cast<sRotInfos*>(aRotInfos);
+  sAppData *pAppData = static_cast<sAppData*>(pRotInfos->appData);
+  
   msg.clear();
-  msg = "RT";
+  msg = "SA";
 
   if(!isClicked)
     {
       isClicked = true;
-      msg += "1";
+      msg += "RT1";
+      gtk_picture_set_filename(GTK_PICTURE( pRotInfos->logoCheck ), "res/check.png");
+      gtk_label_set_text(GTK_LABEL(pRotInfos->powerLabel), "Please wait until the rotor reaches its rated speed");
     }
   else
     {
       isClicked = false;  
-      msg += "0";
+      msg += "RT0";
+      gtk_picture_set_filename(GTK_PICTURE( pRotInfos->logoCheck ), "res/cross.png");
+      gtk_label_set_text(GTK_LABEL(pRotInfos->powerLabel), "Please wait until the rotor has finished turning");
     }
   
-  std::cout << "OnOff button clicked, msg : " << msg << std::endl;
-
-  if(pAppData != NULL)
+   
+  if(pRotInfos != NULL)
     {
-      /* while(EBUSY == pthread_mutex_trylock(&pAppData->lock))
-	{
-
-	}*/
-
-      //pthread_mutex_lock(&pAppData->lock);
-	  
-      pAppData->hCom.SendMessage(msg);
-  
-      //pthread_mutex_unlock(&pAppData->lock);
+      //std::cout << "OnOff button clicked, msg : " << msg << std::endl;      
+      pAppData->hCom.SendMessage(msg, false);
+      gtk_button_set_label(GTK_BUTTON(aBtn), "Waiting...");
+      gtk_widget_set_sensitive(GTK_WIDGET(aBtn), FALSE);
+      g_timeout_add(15000, OnOffReactivateButton, aBtn);
+      g_timeout_add(15000, OnOffReactivateLabel, pRotInfos->powerLabel);
     }
+
 }
 
-void ChangeRot(void *aAppData)
+void ChangeRot(GtkButton *aBtn, gpointer aRotInfos)
 {
-  //Send a message to BC to change direction rotation Rotor
+  static std::string msg;  
+  static bool isClicked = true;
+  sRotInfos *pRotInfos = static_cast<sRotInfos*>(aRotInfos);
+  sAppData *pAppData = static_cast<sAppData*>(pRotInfos->appData);
+  
+  msg.clear();
+  msg = "SA";
+
+  if(!isClicked)
+    {
+      isClicked = true;
+      msg += "RTR";
+      gtk_picture_set_filename(GTK_PICTURE( pRotInfos->logoRot ), "res/arrow_rot_right.png");
+    }
+  else
+    {
+      isClicked = false;  
+      msg += "RTL";
+      gtk_picture_set_filename(GTK_PICTURE( pRotInfos->logoRot ), "res/arrow_rot_left.png");
+    }
+  
+   
+  if(pRotInfos != NULL)
+    {
+      //std::cout << "OnOff button clicked, msg : " << msg << std::endl;      
+      pAppData->hCom.SendMessage(msg, false);
+    }
+
 
 }

@@ -23,6 +23,7 @@ static void *AppThreadManagement(void *aData)
       if(0 == gAppData.hCom.Connect(ENET_SERVER_HOST, 18304))
 	{
 	  isNetStarted = true;
+	  idUpdateBC = g_timeout_add(100, UpdateFromBC, &gAppData);
 	}
 
       //Pause the thread
@@ -56,7 +57,6 @@ static void *AppThreadManagement(void *aData)
 	      std::cout << "Polar file loaded : " << pPolarData->fileName << std::endl;
 
 	      //Add peridic update callback
-	      idUpdateBC = g_timeout_add(100, UpdateFromBC, &gAppData);
 	      idUpdatePolar = g_timeout_add(100, UpdatePolar, &gAppData);
 
 	      isNcLoaded = true;
@@ -115,6 +115,8 @@ void AppActivate(GApplication *app, gpointer aUserData)
   static GtkWidget *abTitle, *abInfos;
   /********/
   /*Sail Management variables*/
+  static sRotInfos rotInfos;
+  static GtkWidget *logoRotorCheck, *logoRotorDir, *powerLabel;
   static GtkWidget *saBodyBox, *saMainBox,  *saTitleBox;
   static GtkWidget *saTitle;
   /********/
@@ -245,24 +247,19 @@ void AppActivate(GApplication *app, gpointer aUserData)
 	     &abTitle,&abInfos//Labels
 	     );
 
-
-  while(!gAppData.hCom.IsConnected())
-    {
-       sleep(1);
-    }
-
   //Sail management create boxes
   SaCreateBoxes(&saBodyBox, &saMainBox, &saTitleBox);
 
   //Sail management title
   SaSetTitle(&saTitle);
+
+  rotInfos.appData = &gAppData;
   
   /*Sail management boxes*/
   SaSetBoxes(&saBodyBox,&saMainBox,&saTitleBox,//Boxes
-	     &saTitle,//Labels
-	     &gAppData);
-
-     
+	     &saTitle, &powerLabel,//Labels
+	     &logoRotorCheck, &logoRotorDir, //Logos
+	     &gAppData, &rotInfos);
 
   
   /*Tab menu*/
@@ -317,6 +314,7 @@ void AppActivate(GApplication *app, gpointer aUserData)
   gtk_widget_add_css_class(prTitle, "title-label");
   gtk_widget_add_css_class(abTitle, "title-label");
   gtk_widget_add_css_class(saTitle, "title-label");
+  gtk_widget_add_css_class(saBodyBox, "textOut-label");
   //gtk_widget_add_css_class(mainBox, "back-template");
   gtk_widget_add_css_class(piTextInBox, "textIn-label");
   gtk_widget_add_css_class(piTextOutBox, "textOut-label");

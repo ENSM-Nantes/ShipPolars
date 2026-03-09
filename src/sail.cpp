@@ -18,34 +18,47 @@ void SaSetTitle(GtkWidget **aTitle)
 }
 
 
-void SaSetRotorBox(GtkWidget **aRotorBox, GtkWidget **aOnOffBtn, GtkWidget **aChangeRotationBtn, void *aAppData)
+void SaSetRotorBox(GtkWidget **aRotorBox, GtkWidget **aOnOffBtn, GtkWidget **aChangeRotationBtn, sRotInfos *aRotInfos)
 {
+  static GtkWidget *onOffBox, *changeRotationBox;
+
+  onOffBox = gtk_box_new(GTK_ORIENTATION_HORIZONTAL, 10);
+  changeRotationBox = gtk_box_new(GTK_ORIENTATION_HORIZONTAL, 10);
+  
   *aOnOffBtn = gtk_button_new_with_label ("Power On/off");
   *aChangeRotationBtn = gtk_button_new_with_label ("Change rotation direction");  
+
   GtkWidget *empty1 = gtk_label_new(" ");
   GtkWidget *empty2 = gtk_label_new(" ");
   GtkWidget *empty3 = gtk_label_new(" ");
-
-  gtk_box_append(GTK_BOX (*aRotorBox), empty1);
-  gtk_box_append(GTK_BOX (*aRotorBox), *aOnOffBtn);
-  gtk_box_append(GTK_BOX (*aRotorBox), empty2);
-  gtk_box_append(GTK_BOX (*aRotorBox), *aChangeRotationBtn);
-
-  gtk_widget_set_halign(*aOnOffBtn, GTK_ALIGN_START);
-  gtk_widget_set_valign(*aOnOffBtn, GTK_ALIGN_START);
-
-  gtk_widget_set_halign(*aChangeRotationBtn, GTK_ALIGN_START);
-  gtk_widget_set_valign(*aChangeRotationBtn, GTK_ALIGN_START);
- 
   
-  g_signal_connect(*aOnOffBtn, "clicked", G_CALLBACK(OnOffRotor), aAppData);
-  g_signal_connect(*aChangeRotationBtn, "clicked", G_CALLBACK(ChangeRot), aAppData);
+  gtk_box_append(GTK_BOX (onOffBox), *aOnOffBtn);
+  gtk_box_append(GTK_BOX (onOffBox), aRotInfos->logoCheck); 
+  gtk_box_append(GTK_BOX (onOffBox), aRotInfos->powerLabel);
+
+  gtk_box_append(GTK_BOX (changeRotationBox), *aChangeRotationBtn);
+  gtk_box_append(GTK_BOX (changeRotationBox),  aRotInfos->logoRot);
+  
+  gtk_box_append(GTK_BOX (*aRotorBox), empty1);
+  gtk_box_append(GTK_BOX (*aRotorBox), onOffBox);
+  gtk_box_append(GTK_BOX (*aRotorBox), empty2);
+  gtk_box_append(GTK_BOX (*aRotorBox), changeRotationBox);
+
+  //gtk_widget_set_halign(onOffBox, GTK_ALIGN_START);
+  //gtk_widget_set_valign(onOffBox, GTK_ALIGN_START);
+
+  //gtk_widget_set_halign(changeRotationBox, GTK_ALIGN_START);
+  //gtk_widget_set_valign(changeRotationBox, GTK_ALIGN_START);
+ 
+  g_signal_connect(*aOnOffBtn, "clicked", G_CALLBACK(OnOffRotor), aRotInfos);
+  g_signal_connect(*aChangeRotationBtn, "clicked", G_CALLBACK(ChangeRot), aRotInfos);
 
 }
 
 void SaSetBoxes(GtkWidget **aSaBodyBox,GtkWidget **aSaMainBox,GtkWidget **aSaTitleBox,//Boxes
-	        GtkWidget **aTitle,//Labels
-		void *aAppData
+	        GtkWidget **aTitle, GtkWidget **aPowerLabel,//Labels
+		GtkWidget **aLogoRotorCheck, GtkWidget **aLogoRotorDir,
+		void *aAppData, sRotInfos *aRotInfos 
 		) 
 {
   static GtkWidget *sailTabBox, *rotorBox, *sail2Box, *sail3Box, *sail4Box, *sail5Box, *sail6Box;
@@ -60,9 +73,17 @@ void SaSetBoxes(GtkWidget **aSaBodyBox,GtkWidget **aSaMainBox,GtkWidget **aSaTit
   sail5Box = gtk_box_new(GTK_ORIENTATION_VERTICAL, 10);
   sail6Box = gtk_box_new(GTK_ORIENTATION_VERTICAL, 10);
 
-  //Rotor section
-  SaSetRotorBox(&rotorBox, &onOffBtn, &changeRotationBtn, aAppData);
+  *aPowerLabel = gtk_label_new(" ");
+  aRotInfos->powerLabel = *aPowerLabel;
+  
+  *aLogoRotorCheck = gtk_picture_new_for_filename("res/cross.png");
+  aRotInfos->logoCheck = *aLogoRotorCheck;
 
+  *aLogoRotorDir = gtk_picture_new_for_filename("res/arrow_rot_right.png");
+  aRotInfos->logoRot = *aLogoRotorDir;
+  
+  //Rotor section
+  SaSetRotorBox(&rotorBox, &onOffBtn, &changeRotationBtn, aRotInfos);
   
   /*Tab menu*/
   GtkWidget *stack = gtk_stack_new();

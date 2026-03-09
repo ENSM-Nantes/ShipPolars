@@ -42,12 +42,8 @@ gboolean UpdatePolar(gpointer aUserData)
 gboolean UpdateFromBC(gpointer aUserData)
 {
   sAppData *data = (sAppData*)aUserData;
-
-  pthread_mutex_lock(&data->lock);
   
-  data->hCom.WaitMessage(90, data->osMsg);	  
-
-  pthread_mutex_unlock(&data->lock);
+  data->hCom.WaitMessage(0, data->osMsg);
   
   return true;
 }

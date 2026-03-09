@@ -22,7 +22,6 @@ class Message
   std::string mAppWindSpeed;
   std::string mAppWindDir;
   
-  
 };
 
 
