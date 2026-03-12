@@ -37,13 +37,17 @@ gboolean DeactivateChangeDirButton(gpointer aData)
   sAppData *pAppData = static_cast<sAppData*>(pRotInfos->appData);
 
   bool onOff = pAppData->osMsg.GetRotOnOff();
-
+  float speed = pAppData->osMsg.GetRotSpeed();
+  
   //gtk_button_set_label(GTK_BUTTON(pRotInfos->btnChangeDir), "");
   if(onOff)
     gtk_widget_set_sensitive(GTK_WIDGET(pRotInfos->btnChangeDir), FALSE);
   else
-    gtk_widget_set_sensitive(GTK_WIDGET(pRotInfos->btnChangeDir), TRUE);
-  
+    {
+      if(speed == 0)
+	gtk_widget_set_sensitive(GTK_WIDGET(pRotInfos->btnChangeDir), TRUE);
+    }
+      
   return TRUE;
 }
 

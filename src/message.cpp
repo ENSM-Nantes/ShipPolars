@@ -23,7 +23,7 @@ Message::~Message()
 int Message::Parse(const char *aData, size_t aDataSize)
 {
   std::string inRawData(aData, aDataSize);
-  std::cout << "Message : " << inRawData << std::endl;
+  //std::cout << "Message : " << inRawData << std::endl;
   
   if(0 == inRawData.substr(0,2).compare("OS"))
     {

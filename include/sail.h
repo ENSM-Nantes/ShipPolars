@@ -4,6 +4,8 @@
 #include <gtk/gtk.h>
 #include <string>
 
+#define TIME_TO_START_STOP_ROTOR (30)
+
 struct sRotInfos
 {
   GtkWidget *logoCheck;

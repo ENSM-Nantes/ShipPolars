@@ -145,10 +145,15 @@ void OnOffRotor(GtkButton *aBtn, gpointer aRotInfos)
     {
       //std::cout << "OnOff button clicked, msg : " << msg << std::endl;      
       pAppData->hCom.SendMessage(msg, false);
-      gtk_button_set_label(GTK_BUTTON(aBtn), "Waiting...");
-      gtk_widget_set_sensitive(GTK_WIDGET(aBtn), FALSE);
-      g_timeout_add(15000, OnOffReactivateButton, aBtn);
-      g_timeout_add(15000, OnOffReactivateLabel, pRotInfos->powerLabel);
+
+      bool onOff = pAppData->osMsg.GetRotOnOff();
+      if(onOff)
+	{
+	  gtk_button_set_label(GTK_BUTTON(aBtn), "Waiting...");
+	  gtk_widget_set_sensitive(GTK_WIDGET(aBtn), FALSE);
+	  g_timeout_add(TIME_TO_START_STOP_ROTOR*1000, OnOffReactivateButton, aBtn);
+	  g_timeout_add(TIME_TO_START_STOP_ROTOR*1000, OnOffReactivateLabel, pRotInfos->powerLabel);
+	}
     }
 
 }
