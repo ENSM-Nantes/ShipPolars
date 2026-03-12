@@ -31,6 +31,22 @@ gboolean DisplaySpeedRotor(gpointer aData)
   return TRUE;
 }
 
+gboolean DeactivateChangeDirButton(gpointer aData)
+{
+  sRotInfos *pRotInfos = static_cast<sRotInfos*>(aData);
+  sAppData *pAppData = static_cast<sAppData*>(pRotInfos->appData);
+
+  bool onOff = pAppData->osMsg.GetRotOnOff();
+
+  //gtk_button_set_label(GTK_BUTTON(pRotInfos->btnChangeDir), "");
+  if(onOff)
+    gtk_widget_set_sensitive(GTK_WIDGET(pRotInfos->btnChangeDir), FALSE);
+  else
+    gtk_widget_set_sensitive(GTK_WIDGET(pRotInfos->btnChangeDir), TRUE);
+  
+  return TRUE;
+}
+
 void SaSetRotorBox(GtkWidget **aRotorBox, GtkWidget **aOnOffBtn, GtkWidget **aChangeRotationBtn, sRotInfos *aRotInfos)
 {
   static GtkWidget *onOffBox, *changeRotationBox;
@@ -41,6 +57,9 @@ void SaSetRotorBox(GtkWidget **aRotorBox, GtkWidget **aOnOffBtn, GtkWidget **aCh
   *aOnOffBtn = gtk_button_new_with_label ("Power On/off");
   *aChangeRotationBtn = gtk_button_new_with_label ("Change rotation direction");  
 
+  aRotInfos->btnOnOff = *aOnOffBtn;
+  aRotInfos->btnChangeDir = *aChangeRotationBtn;
+  
   gtk_widget_set_hexpand(*aOnOffBtn, FALSE);
   gtk_widget_set_vexpand(*aChangeRotationBtn, FALSE);
   
@@ -89,6 +108,7 @@ void SaSetRotorBox(GtkWidget **aRotorBox, GtkWidget **aOnOffBtn, GtkWidget **aCh
   g_signal_connect(*aChangeRotationBtn, "clicked", G_CALLBACK(ChangeRot), aRotInfos);
 
   g_timeout_add(1000, DisplaySpeedRotor, aRotInfos);
+  g_timeout_add(1000, DeactivateChangeDirButton, aRotInfos);
 }
 
 void SaSetBoxes(GtkWidget **aSaBodyBox,GtkWidget **aSaMainBox,GtkWidget **aSaTitleBox,//Boxes

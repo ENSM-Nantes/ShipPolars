@@ -314,6 +314,8 @@ void AppActivate(GApplication *app, gpointer aUserData)
   gtk_widget_add_css_class(prTitle, "title-label");
   gtk_widget_add_css_class(abTitle, "title-label");
   gtk_widget_add_css_class(saTitle, "title-label");
+  gtk_widget_add_css_class(powerLabel, "textIn-label");
+  gtk_widget_add_css_class(rotSpeedLabel, "textIn-label");
   gtk_widget_add_css_class(saBodyBox, "textOut-label");
   //gtk_widget_add_css_class(mainBox, "back-template");
   gtk_widget_add_css_class(piTextInBox, "textIn-label");

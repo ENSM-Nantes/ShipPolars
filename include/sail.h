@@ -10,8 +10,9 @@ struct sRotInfos
   GtkWidget *logoRot;
   GtkWidget *powerLabel;
   GtkWidget *rotSpeedLabel;
+  GtkWidget *btnOnOff;
+  GtkWidget *btnChangeDir;
   void *appData;
-  
 };
 
 void SaCreateBoxes(GtkWidget **aSaBodyBox, GtkWidget **aSaMainBox, GtkWidget **aSaTitleBox);
