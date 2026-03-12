@@ -9,6 +9,9 @@ Message::Message()
   mTrueWindDir="0";
   mAppWindSpeed="0";
   mAppWindDir="0";
+  mRotOnOff="0";
+  mRotDir="1";
+  mRotSpeed="0";
 }
 
 Message::~Message()
@@ -62,7 +65,7 @@ const float Message::GetAWA(void)
 
 bool Message::GetRotOnOff(void)
 {
-  return true;//mRotOnOff;
+  return std::stoi(mRotOnOff) == 1 ? true : false;
 }
 
 int Message::GetRotDir(void)

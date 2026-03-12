@@ -17,6 +17,19 @@ void SaSetTitle(GtkWidget **aTitle)
   gtk_widget_set_margin_bottom(*aTitle, 100);
 }
 
+gboolean DisplaySpeedRotor(gpointer aData)
+{
+  sRotInfos *pRotInfos = static_cast<sRotInfos*>(aData);
+  sAppData *pAppData = static_cast<sAppData*>(pRotInfos->appData);
+
+  float speed = pAppData->osMsg.GetRotSpeed();
+  std::string speedStr;
+  speedStr = "Rotor rotation speed : (rpm) : " + std::to_string(speed);
+  
+  gtk_label_set_text(GTK_LABEL(pRotInfos->rotSpeedLabel), speedStr.c_str());
+  
+  return TRUE;
+}
 
 void SaSetRotorBox(GtkWidget **aRotorBox, GtkWidget **aOnOffBtn, GtkWidget **aChangeRotationBtn, sRotInfos *aRotInfos)
 {
@@ -41,7 +54,7 @@ void SaSetRotorBox(GtkWidget **aRotorBox, GtkWidget **aOnOffBtn, GtkWidget **aCh
   GtkWidget *empty8 = gtk_label_new(" ");
   GtkWidget *empty9 = gtk_label_new(" ");
   GtkWidget *empty10 = gtk_label_new(" ");
-  GtkWidget *empty11 = gtk_label_new("                        ");
+  GtkWidget *empty11 = gtk_label_new(" ");
   
   gtk_box_append(GTK_BOX (onOffBox), *aOnOffBtn);
   gtk_box_append(GTK_BOX (onOffBox), aRotInfos->logoCheck); 
@@ -51,9 +64,9 @@ void SaSetRotorBox(GtkWidget **aRotorBox, GtkWidget **aOnOffBtn, GtkWidget **aCh
 
   gtk_box_append(GTK_BOX (changeRotationBox), *aChangeRotationBtn);
   gtk_box_append(GTK_BOX (changeRotationBox),  aRotInfos->logoRot);
-  gtk_box_append(GTK_BOX (onOffBox), empty9);
-  gtk_box_append(GTK_BOX (onOffBox), empty10);
-  gtk_box_append(GTK_BOX (onOffBox), empty11);
+  gtk_box_append(GTK_BOX (changeRotationBox), aRotInfos->rotSpeedLabel);
+  gtk_box_append(GTK_BOX (changeRotationBox), empty10);
+  gtk_box_append(GTK_BOX (changeRotationBox), empty11);
   
   gtk_box_append(GTK_BOX (*aRotorBox), empty1);
   gtk_box_append(GTK_BOX (*aRotorBox), empty2);
@@ -75,10 +88,11 @@ void SaSetRotorBox(GtkWidget **aRotorBox, GtkWidget **aOnOffBtn, GtkWidget **aCh
   g_signal_connect(*aOnOffBtn, "clicked", G_CALLBACK(OnOffRotor), aRotInfos);
   g_signal_connect(*aChangeRotationBtn, "clicked", G_CALLBACK(ChangeRot), aRotInfos);
 
+  g_timeout_add(1000, DisplaySpeedRotor, aRotInfos);
 }
 
 void SaSetBoxes(GtkWidget **aSaBodyBox,GtkWidget **aSaMainBox,GtkWidget **aSaTitleBox,//Boxes
-	        GtkWidget **aTitle, GtkWidget **aPowerLabel,//Labels
+	        GtkWidget **aTitle, GtkWidget **aPowerLabel, GtkWidget **aRotSpeedLabel,//Labels
 		GtkWidget **aLogoRotorCheck, GtkWidget **aLogoRotorDir,
 		void *aAppData, sRotInfos *aRotInfos 
 		) 
@@ -106,8 +120,12 @@ void SaSetBoxes(GtkWidget **aSaBodyBox,GtkWidget **aSaMainBox,GtkWidget **aSaTit
   *aLogoRotorCheck = gtk_picture_new_for_filename("res/cross.png");
   aRotInfos->logoCheck = *aLogoRotorCheck;
 
+  *aRotSpeedLabel = gtk_label_new(" ");
+  aRotInfos->rotSpeedLabel = *aRotSpeedLabel;
+  
   *aLogoRotorDir = gtk_picture_new_for_filename("res/arrow_rot_right.png");
   aRotInfos->logoRot = *aLogoRotorDir;
+
   
   //Rotor section
   SaSetRotorBox(&rotorBox, &onOffBtn, &changeRotationBtn, aRotInfos);

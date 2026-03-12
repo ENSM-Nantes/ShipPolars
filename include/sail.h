@@ -9,14 +9,14 @@ struct sRotInfos
   GtkWidget *logoCheck;
   GtkWidget *logoRot;
   GtkWidget *powerLabel;
-  GtkWidget *changeRotLabel;
+  GtkWidget *rotSpeedLabel;
   void *appData;
   
 };
 
 void SaCreateBoxes(GtkWidget **aSaBodyBox, GtkWidget **aSaMainBox, GtkWidget **aSaTitleBox);
 void SaSetTitle(GtkWidget **aTitle);
-void SaSetBoxes(GtkWidget **aSaBodyBox, GtkWidget **aSaMainBox, GtkWidget **aSaTitleBox, GtkWidget **aTitle, GtkWidget **aPowerLabel, GtkWidget **aLogoRotorCheck, GtkWidget **aLogoRotorDir, void *aAppData, sRotInfos *aRotInfos); 
+void SaSetBoxes(GtkWidget **aSaBodyBox, GtkWidget **aSaMainBox, GtkWidget **aSaTitleBox, GtkWidget **aTitle, GtkWidget **aPowerLabel, GtkWidget **aRotSpeedLabel, GtkWidget **aLogoRotorCheck, GtkWidget **aLogoRotorDir, void *aAppData, sRotInfos *aRotInfos); 
 
 
 #endif

@@ -116,7 +116,7 @@ void AppActivate(GApplication *app, gpointer aUserData)
   /********/
   /*Sail Management variables*/
   static sRotInfos rotInfos;
-  static GtkWidget *logoRotorCheck, *logoRotorDir, *powerLabel;
+  static GtkWidget *logoRotorCheck, *logoRotorDir, *powerLabel, *rotSpeedLabel;
   static GtkWidget *saBodyBox, *saMainBox,  *saTitleBox;
   static GtkWidget *saTitle;
   /********/
@@ -257,7 +257,7 @@ void AppActivate(GApplication *app, gpointer aUserData)
   
   /*Sail management boxes*/
   SaSetBoxes(&saBodyBox,&saMainBox,&saTitleBox,//Boxes
-	     &saTitle, &powerLabel,//Labels
+	     &saTitle, &powerLabel, &rotSpeedLabel,//Labels
 	     &logoRotorCheck, &logoRotorDir, //Logos
 	     &gAppData, &rotInfos);
 
