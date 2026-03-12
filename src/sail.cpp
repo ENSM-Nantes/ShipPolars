@@ -28,6 +28,9 @@ void SaSetRotorBox(GtkWidget **aRotorBox, GtkWidget **aOnOffBtn, GtkWidget **aCh
   *aOnOffBtn = gtk_button_new_with_label ("Power On/off");
   *aChangeRotationBtn = gtk_button_new_with_label ("Change rotation direction");  
 
+  gtk_widget_set_hexpand(*aOnOffBtn, FALSE);
+  gtk_widget_set_vexpand(*aChangeRotationBtn, FALSE);
+  
   GtkWidget *empty1 = gtk_label_new(" ");
   GtkWidget *empty2 = gtk_label_new(" ");
   GtkWidget *empty3 = gtk_label_new(" ");
