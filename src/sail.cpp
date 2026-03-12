@@ -46,14 +46,14 @@ void SaSetRotorBox(GtkWidget **aRotorBox, GtkWidget **aOnOffBtn, GtkWidget **aCh
   gtk_box_append(GTK_BOX (onOffBox), *aOnOffBtn);
   gtk_box_append(GTK_BOX (onOffBox), aRotInfos->logoCheck); 
   gtk_box_append(GTK_BOX (onOffBox), aRotInfos->powerLabel);
-   gtk_box_append(GTK_BOX (onOffBox), empty7);
-   gtk_box_append(GTK_BOX (onOffBox), empty8);
+  gtk_box_append(GTK_BOX (onOffBox), empty7);
+  gtk_box_append(GTK_BOX (onOffBox), empty8);
 
   gtk_box_append(GTK_BOX (changeRotationBox), *aChangeRotationBtn);
   gtk_box_append(GTK_BOX (changeRotationBox),  aRotInfos->logoRot);
-   gtk_box_append(GTK_BOX (onOffBox), empty9);
-   gtk_box_append(GTK_BOX (onOffBox), empty10);
-    gtk_box_append(GTK_BOX (onOffBox), empty11);
+  gtk_box_append(GTK_BOX (onOffBox), empty9);
+  gtk_box_append(GTK_BOX (onOffBox), empty10);
+  gtk_box_append(GTK_BOX (onOffBox), empty11);
   
   gtk_box_append(GTK_BOX (*aRotorBox), empty1);
   gtk_box_append(GTK_BOX (*aRotorBox), empty2);

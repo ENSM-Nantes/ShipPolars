@@ -14,14 +14,19 @@ class Message
   const float GetSTW(void);
   const float GetAWS(void);
   const float GetAWA(void);
-    
+  bool GetRotOnOff(void);
+  int GetRotDir(void);
+  float GetRotSpeed(void);
+  
  private:
   std::string mSpeedThroughWater;
   std::string mTrueWindSpeed;
   std::string mTrueWindDir;
   std::string mAppWindSpeed;
   std::string mAppWindDir;
-  
+  std::string mRotOnOff;
+  std::string mRotDir;
+  std::string mRotSpeed;
 };
 
 
