@@ -34,24 +34,43 @@ void SaSetRotorBox(GtkWidget **aRotorBox, GtkWidget **aOnOffBtn, GtkWidget **aCh
   GtkWidget *empty1 = gtk_label_new(" ");
   GtkWidget *empty2 = gtk_label_new(" ");
   GtkWidget *empty3 = gtk_label_new(" ");
+  GtkWidget *empty4 = gtk_label_new(" ");
+  GtkWidget *empty5 = gtk_label_new(" ");
+  GtkWidget *empty6 = gtk_label_new(" ");
+  GtkWidget *empty7 = gtk_label_new(" ");
+  GtkWidget *empty8 = gtk_label_new(" ");
+  GtkWidget *empty9 = gtk_label_new(" ");
+  GtkWidget *empty10 = gtk_label_new(" ");
+  GtkWidget *empty11 = gtk_label_new("                        ");
   
   gtk_box_append(GTK_BOX (onOffBox), *aOnOffBtn);
   gtk_box_append(GTK_BOX (onOffBox), aRotInfos->logoCheck); 
   gtk_box_append(GTK_BOX (onOffBox), aRotInfos->powerLabel);
+   gtk_box_append(GTK_BOX (onOffBox), empty7);
+   gtk_box_append(GTK_BOX (onOffBox), empty8);
 
   gtk_box_append(GTK_BOX (changeRotationBox), *aChangeRotationBtn);
   gtk_box_append(GTK_BOX (changeRotationBox),  aRotInfos->logoRot);
+   gtk_box_append(GTK_BOX (onOffBox), empty9);
+   gtk_box_append(GTK_BOX (onOffBox), empty10);
+    gtk_box_append(GTK_BOX (onOffBox), empty11);
   
   gtk_box_append(GTK_BOX (*aRotorBox), empty1);
-  gtk_box_append(GTK_BOX (*aRotorBox), onOffBox);
   gtk_box_append(GTK_BOX (*aRotorBox), empty2);
+  gtk_box_append(GTK_BOX (*aRotorBox), onOffBox);
+  gtk_box_append(GTK_BOX (*aRotorBox), empty3);
+  gtk_box_append(GTK_BOX (*aRotorBox), empty4);
   gtk_box_append(GTK_BOX (*aRotorBox), changeRotationBox);
+  gtk_box_append(GTK_BOX (*aRotorBox), empty5);
+  gtk_box_append(GTK_BOX (*aRotorBox), empty6);
 
-  //gtk_widget_set_halign(onOffBox, GTK_ALIGN_START);
-  //gtk_widget_set_valign(onOffBox, GTK_ALIGN_START);
+//gtk_box_set_homogeneous (GTK_BOX(onOffBox), TRUE);
+  gtk_widget_set_halign(onOffBox, GTK_ALIGN_START);
+  gtk_widget_set_valign(onOffBox, GTK_ALIGN_START);
 
-  //gtk_widget_set_halign(changeRotationBox, GTK_ALIGN_START);
-  //gtk_widget_set_valign(changeRotationBox, GTK_ALIGN_START);
+//gtk_box_set_homogeneous (GTK_BOX(changeRotationBox), TRUE);
+  gtk_widget_set_halign(changeRotationBox, GTK_ALIGN_START);
+  gtk_widget_set_valign(changeRotationBox, GTK_ALIGN_START);
  
   g_signal_connect(*aOnOffBtn, "clicked", G_CALLBACK(OnOffRotor), aRotInfos);
   g_signal_connect(*aChangeRotationBtn, "clicked", G_CALLBACK(ChangeRot), aRotInfos);
