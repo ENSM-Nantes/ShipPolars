@@ -22,7 +22,7 @@ gboolean DisplaySpeedRotor(gpointer aData)
   sRotInfos *pRotInfos = static_cast<sRotInfos*>(aData);
   sAppData *pAppData = static_cast<sAppData*>(pRotInfos->appData);
 
-  float speed = pAppData->osMsg.GetRotSpeed();
+  float speed = pAppData->osMsg.GetRotSpeed() * 60;
   std::string speedStr;
   speedStr = "Rotor rotation speed : (rpm) : " + std::to_string(speed);
   
