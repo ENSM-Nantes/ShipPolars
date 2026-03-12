@@ -76,6 +76,11 @@ void SaSetBoxes(GtkWidget **aSaBodyBox,GtkWidget **aSaMainBox,GtkWidget **aSaTit
   sail5Box = gtk_box_new(GTK_ORIENTATION_VERTICAL, 10);
   sail6Box = gtk_box_new(GTK_ORIENTATION_VERTICAL, 10);
 
+  gtk_box_set_homogeneous (GTK_BOX(rotorBox), TRUE);
+  gtk_widget_set_halign(rotorBox, GTK_ALIGN_START);
+  gtk_widget_set_valign(rotorBox, GTK_ALIGN_START);
+
+  
   *aPowerLabel = gtk_label_new(" ");
   aRotInfos->powerLabel = *aPowerLabel;
   
