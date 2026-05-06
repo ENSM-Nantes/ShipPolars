@@ -3,10 +3,10 @@
 
 #include <gtk/gtk.h>
 
-#define FORCE_LINE_COUNT (9)
+#define FORCE_LINE_COUNT (11)
 #define RADIUS_MAX (350)
 #define ANGLE_STEP_COUNT (13)
-#define FORCE_MAX (120)
+#define FORCE_MAX (150)
 #define ANGLE_STEP_DEGRES (15)
 
 /****************** Structure definitions **************/
