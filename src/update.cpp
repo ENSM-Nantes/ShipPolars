@@ -42,8 +42,8 @@ gboolean UpdatePolar(gpointer aUserData)
 gboolean UpdateFromBC(gpointer aUserData)
 {
   sAppData *data = (sAppData*)aUserData;
-
-  data->hCom.WaitMessage(90, data->osMsg);	  
-      
+  
+  data->hCom.WaitMessage(0, data->osMsg);
+  
   return true;
 }
