@@ -17,7 +17,6 @@ typedef struct
   Com hCom;
   Message osMsg;
   sPrData *prData;
-  
 }sAppData;
 
 

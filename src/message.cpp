@@ -9,6 +9,9 @@ Message::Message()
   mTrueWindDir="0";
   mAppWindSpeed="0";
   mAppWindDir="0";
+  mRotOnOff="0";
+  mRotDir="1";
+  mRotSpeed="0";
 }
 
 Message::~Message()
@@ -32,6 +35,9 @@ int Message::Parse(const char *aData, size_t aDataSize)
       mTrueWindDir = inData.at(5);
       mAppWindSpeed = inData.at(8);
       mAppWindDir = inData.at(7);
+      mRotOnOff = inData.at(9);
+      mRotDir = inData.at(10);
+      mRotSpeed = inData.at(11);
     }
 
   return 0;
@@ -55,4 +61,19 @@ const float Message::GetSTW(void)
 const float Message::GetAWA(void)
 {
   return std::stof(mAppWindDir);
+}
+
+bool Message::GetRotOnOff(void)
+{
+  return std::stoi(mRotOnOff) == 1 ? true : false;
+}
+
+int Message::GetRotDir(void)
+{
+  return std::stoi(mRotDir);
+}
+
+float Message::GetRotSpeed(void)
+{
+  return std::stof(mRotSpeed);
 }

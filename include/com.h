@@ -16,12 +16,11 @@ public:
   int Connect(std::string aServerName, unsigned int aPort);
   void WaitMessage(unsigned int aTimeout, Message& aMsg);
   int SendMessage(const std::string& aMsg, bool aIsReliable=false);
-  
- private:
+private:
   ENetAddress mWiAddress;
   ENetPeer *mWiPeer;
   ENetHost *mWiHandler;
-
+  
 };
 
 #endif
