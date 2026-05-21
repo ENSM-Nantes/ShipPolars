@@ -18,6 +18,6 @@ libgtk-4-dev libenet-dev libnetcdf-dev
 ```./PolarManager```
 
 ## Example
-![alt text](https://github.com/ENSM-Nantes/PolarInject/blob/main/res/ShipPolars_PS.png)
-![alt text](https://github.com/ENSM-Nantes/PolarInject/blob/main/res/ShipPolars_PR.png)
-![alt text](https://github.com/ENSM-Nantes/PolarInject/blob/main/res/ShipPolars_SM.png)
+![alt text](https://github.com/ENSM-Nantes/ShipPolars/blob/main/res/ShipPolars_PS.png)
+![alt text](https://github.com/ENSM-Nantes/ShipPolars/blob/main/res/ShipPolars_PR.png)
+![alt text](https://github.com/ENSM-Nantes/ShipPolars/blob/main/res/ShipPolars_SM.png)
