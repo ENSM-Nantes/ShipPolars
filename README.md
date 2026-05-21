@@ -7,6 +7,8 @@
  - Read a polar from a nc file and display it. The polar is refreshing from BridgeCommand according to "speed through water", "apparent wind speed" and "apparent wind direction".
    The position ship on the polar is alreadey displayed.
 
+- nc files have been generated thanks to [Shiplify](https://shiplify.io/index) online tool. 
+
 ## Requirements
 libgtk-4-dev libenet-dev libnetcdf-dev
 
