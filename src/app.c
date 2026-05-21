@@ -124,7 +124,7 @@ void AppActivate(GApplication *app, gpointer aUserData)
   
   /*Window*/
   win = gtk_application_window_new (GTK_APPLICATION (app));
-  gtk_window_set_title (GTK_WINDOW (win), "Polar Manager");
+  gtk_window_set_title (GTK_WINDOW (win), "ShipPolars");
   gtk_window_set_default_size (GTK_WINDOW (win), 1920, 1080);
   gtk_window_set_resizable(GTK_WINDOW(win), TRUE);
   gtk_window_set_decorated(GTK_WINDOW(win), TRUE);
@@ -241,7 +241,7 @@ void AppActivate(GApplication *app, gpointer aUserData)
 
   //About title
   AbSetTitle(&abTitle);
-  abInfos = gtk_label_new("\tName : Polar Manager\n\r\tVersion : v1.2\n\r\tProject : SOMOS Project 2026\n\r\tOwner : ENSM-Nantes\n\r\tContact : florent.richard@supmaritime.fr\n\r\tWebsite : somos-project.fr");
+  abInfos = gtk_label_new("\tName : ShipPolars \n\r\tVersion : v1.3\n\r\tProject : SOMOS Project 2026\n\r\tOwner : ENSM-Nantes\n\r\tContact : florent.richard@supmaritime.fr\n\r\tWebsite : somos-project.fr");
   
   /*About boxes*/
   AbSetBoxes(&abBodyBox,&abMainBox,&abTitleBox,//Boxes
@@ -293,7 +293,7 @@ void AppActivate(GApplication *app, gpointer aUserData)
   /*Overlay*/
   overlay = gtk_overlay_new();
   //Footer overlay, display on all pages
-  labelFooter = gtk_label_new("Polar Manager v1.2 - SOMOS Project 2026 - ENSM Nantes");
+  labelFooter = gtk_label_new("ShipPolars v1.3 - SOMOS Project 2026 - ENSM Nantes");
   gtk_widget_set_halign(labelFooter, GTK_ALIGN_END);
   gtk_widget_set_valign(labelFooter, GTK_ALIGN_END);
       
