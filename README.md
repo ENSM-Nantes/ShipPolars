@@ -14,8 +14,7 @@ libgtk-4-dev libenet-dev libnetcdf-dev
 ```./build.sh```
    
 ## Use
- - Copy/paste the polar file corresponding to the scenario, rename it in polar.nc into the same folder as the binary
-```./PolarManager```
+```./ShipPolars```
 
 ## Example
 ![alt text](https://github.com/ENSM-Nantes/ShipPolars/blob/main/res/ShipPolars_PS.png)
