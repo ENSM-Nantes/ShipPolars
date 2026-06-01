@@ -31,6 +31,10 @@ void SelectScenario(GtkDropDown *aListDropDown, GParamSpec *aPrmSpec, gpointer a
 	  strcpy(pPolarData->fileName, "polar/polar_SC-Connector_2rotors30x5.nc");
 	  break;
 
+	case 4:
+	  strcpy(pPolarData->fileName, "polar/polar_KVLCC2_4rotors24x4.nc");
+	  break;
+
 	  
 	default:
 	  break;

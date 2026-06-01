@@ -83,6 +83,7 @@ void AppScenarioList(GtkStringList **aScenarioItems, GtkWidget **aScenarioDropDo
   gtk_string_list_append(*aScenarioItems, "CopenhagenFerry - 1 rotor (30x5)");
   gtk_string_list_append(*aScenarioItems, "Fake Cargo Maersk - 2 rotors (18x3)");
   gtk_string_list_append(*aScenarioItems, "SC-Connector - 2 rotors (30x5)");
+  gtk_string_list_append(*aScenarioItems, "KVLCC2 - 4 rotors (24x4)");
 
   *aScenarioDropDown = gtk_drop_down_new(G_LIST_MODEL(*aScenarioItems), NULL);
   g_signal_connect(*aScenarioDropDown, "notify::selected", G_CALLBACK(SelectScenario), aPolarData);
