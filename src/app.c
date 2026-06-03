@@ -6,7 +6,7 @@
 #include "sail.h"
 
 //Global app data
-sPrData gPrData={{-400,-320,-240,-160,-80,0,80,160,240,320,400},{0},{0},0,0,NULL,NULL,NULL,NULL};
+sPrData gPrData={{-800,-640,-480,-320,-160,0,160,320,480,640,800},{0},{0},0,0,NULL,NULL,NULL,NULL};
 sAppData gAppData;
 
 
