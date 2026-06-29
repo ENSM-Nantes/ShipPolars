@@ -17,6 +17,10 @@ gboolean UpdatePolar(gpointer aUserData)
 
   alertRot.clear();
 
+  pPrData->fOsX = data->sails.GetForce('X', data->osMsg.GetSTW(), data->osMsg.GetAWS(), data->osMsg.GetAWA());
+  pPrData->fOsY = data->sails.GetForce('Y', data->osMsg.GetSTW(), data->osMsg.GetAWS(), data->osMsg.GetAWA());
+
+  
   if(data->osMsg.GetRotOnOff() == true)
     {
       //Starboard wind
@@ -42,9 +46,6 @@ gboolean UpdatePolar(gpointer aUserData)
 	    }
 	}
   
-      pPrData->fOsX = data->sails.GetForce('X', data->osMsg.GetSTW(), data->osMsg.GetAWS(), data->osMsg.GetAWA());
-      pPrData->fOsY = data->sails.GetForce('Y', data->osMsg.GetSTW(), data->osMsg.GetAWS(), data->osMsg.GetAWA());
-
       gtk_widget_queue_draw(pPrData->areaX);
       gtk_widget_queue_draw(pPrData->areaY);
       gtk_widget_queue_draw(pPrData->areaSum);
