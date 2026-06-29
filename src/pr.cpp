@@ -58,9 +58,9 @@ void PRSetBoxes(GtkWidget **aPrBodyBox, GtkWidget **aPrMainBox, GtkWidget **aPrT
 
 void PRDrawPoint(cairo_t *aCr, float aX, double aY, int aSize)
 {
-    float radius=5*aSize;
-    cairo_arc(aCr, aX, aY, radius, 0, 2*M_PI);
-    cairo_fill(aCr);
+  float radius=5*aSize;
+  cairo_arc(aCr, aX, aY, radius, 0, 2*M_PI);
+  cairo_fill(aCr);
 }
 
 void PRDrawPolarX(GtkDrawingArea *aArea, cairo_t *aCr, int aWidth, int aHeight, gpointer aData)
@@ -278,43 +278,48 @@ void PRDrawSum(GtkDrawingArea *aArea, cairo_t *aCr, int aWidth, int aHeight, gpo
   sAppData *data = (sAppData*)aData;
   sPrData *pPrData = (sPrData*)data->prData;
 
+  bool onOff = data->osMsg.GetRotOnOff();
+  
   float fOsX = pPrData->fOsX;
   float fOsY = pPrData->fOsY;
 
-  cx = aWidth/2;
-  cy = aHeight/1.5;
+  if(onOff)
+    {
+      cx = aWidth/2;
+      cy = aHeight/1.5;
   
-  len = 180;
-  angle = atan2(-fOsX, fOsY);
+      len = 180;
+      angle = atan2(-fOsX, fOsY);
     
-  cairo_save(aCr);
-  cairo_translate(aCr, cx, cy);
-  cairo_rotate(aCr, angle);
+      cairo_save(aCr);
+      cairo_translate(aCr, cx, cy);
+      cairo_rotate(aCr, angle);
 
-  shaftLen = len * 0.8;
-  shaftWidth = 48;
-  headLen = len * 0.2;
-  headWidth = 70;
-  totalLen = shaftLen + headLen;
-  offset = -totalLen/2;
+      shaftLen = len * 0.8;
+      shaftWidth = 48;
+      headLen = len * 0.2;
+      headWidth = 70;
+      totalLen = shaftLen + headLen;
+      offset = -totalLen/2;
     
-  cairo_move_to(aCr, offset, -shaftWidth/2);
-  cairo_line_to(aCr, offset+shaftLen, -shaftWidth/2);
-  cairo_line_to(aCr, offset+shaftLen, -headWidth/2);
-  cairo_line_to(aCr, offset+shaftLen + headLen, 0);
-  cairo_line_to(aCr, offset+shaftLen, headWidth/2);
-  cairo_line_to(aCr, offset+shaftLen, shaftWidth/2);
-  cairo_line_to(aCr, offset, shaftWidth/2);
-  cairo_close_path(aCr);
+      cairo_move_to(aCr, offset, -shaftWidth/2);
+      cairo_line_to(aCr, offset+shaftLen, -shaftWidth/2);
+      cairo_line_to(aCr, offset+shaftLen, -headWidth/2);
+      cairo_line_to(aCr, offset+shaftLen + headLen, 0);
+      cairo_line_to(aCr, offset+shaftLen, headWidth/2);
+      cairo_line_to(aCr, offset+shaftLen, shaftWidth/2);
+      cairo_line_to(aCr, offset, shaftWidth/2);
+      cairo_close_path(aCr);
 
-  if(fOsX > 0)
-    cairo_set_source_rgb(aCr, 0, 0.8, 0);
-  else
-    cairo_set_source_rgb(aCr, 0.8, 0, 0);
+      if(fOsX > 0)
+	cairo_set_source_rgb(aCr, 0, 0.8, 0);
+      else
+	cairo_set_source_rgb(aCr, 0.8, 0, 0);
 
-  cairo_fill_preserve(aCr);
-  cairo_set_source_rgb(aCr, 1, 1, 1);
-  cairo_set_line_width(aCr, 6);
-  cairo_stroke(aCr);
-  cairo_restore(aCr);
+      cairo_fill_preserve(aCr);
+      cairo_set_source_rgb(aCr, 1, 1, 1);
+      cairo_set_line_width(aCr, 6);
+      cairo_stroke(aCr);
+      cairo_restore(aCr);
+    }
 }
