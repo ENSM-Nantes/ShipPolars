@@ -13,57 +13,65 @@ gboolean UpdatePolar(gpointer aUserData)
       pPrData->forceY[i]=data->sails.GetForce('Y', data->osMsg.GetSTW(), data->osMsg.GetAWS(), i*15);
     }
 
-  pPrData->fOsX = data->sails.GetForce('X', data->osMsg.GetSTW(), data->osMsg.GetAWS(), data->osMsg.GetAWA());
-  pPrData->fOsY = data->sails.GetForce('Y', data->osMsg.GetSTW(), data->osMsg.GetAWS(), data->osMsg.GetAWA());
+  std::string alertRot = "";
 
-  gtk_widget_queue_draw(pPrData->areaX);
-  gtk_widget_queue_draw(pPrData->areaY);
-  gtk_widget_queue_draw(pPrData->areaSum);
+  alertRot.clear();
 
-  float fOsX = pPrData->fOsX;
-  float fOsY = pPrData->fOsY;
-  
-  std::string alertChangeRot = "";
-
-  alertChangeRot.clear();
-  
-  //Starboard wind
-  if((data->osMsg.GetAWA()) >= 0 && (data->osMsg.GetAWA()) <= 180)
+  if(data->osMsg.GetRotOnOff() == true)
     {
-      if(data->osMsg.GetRotDir() == -1)
-        {
-          fOsX *= -1;
-          fOsY *= -1;
+      //Starboard wind
+      if((data->osMsg.GetAWA()) >= 0 && (data->osMsg.GetAWA()) <= 180)
+	{
+	  if(data->osMsg.GetRotDir() == -1)
+	    {
+	      pPrData->fOsX *= -1;
+	      pPrData->fOsY *= -1;
 
-	  alertChangeRot = "You have to change rotor rotation direction !";
-        }
+	      alertRot = "You have to change\nrotor rotation direction !";
+	    }
+	}
+      //Port wind
+      else
+	{
+	  if(data->osMsg.GetRotDir() == 1)
+	    {
+	      pPrData->fOsX *= -1;
+	      pPrData->fOsY *= -1;
+	  
+	      alertRot = "You have to change\nrotor rotation direction !";
+	    }
+	}
+  
+      pPrData->fOsX = data->sails.GetForce('X', data->osMsg.GetSTW(), data->osMsg.GetAWS(), data->osMsg.GetAWA());
+      pPrData->fOsY = data->sails.GetForce('Y', data->osMsg.GetSTW(), data->osMsg.GetAWS(), data->osMsg.GetAWA());
+
+      gtk_widget_queue_draw(pPrData->areaX);
+      gtk_widget_queue_draw(pPrData->areaY);
+      gtk_widget_queue_draw(pPrData->areaSum);
+
+      float fOsX = pPrData->fOsX;
+      float fOsY = pPrData->fOsY;
+    
+      float angle = (atan2(-fOsX, fOsY) * 180.0 / M_PI) + 90;
+
+      if(angle > 180) 
+	{
+	  float delta = (270-angle);
+	  angle=-90-delta;
+	}
+  
+      float force = sqrt(fOsX*fOsX + fOsY*fOsY);
+      std::string forceLabel = "\n\n\n\n Force : "+std::to_string(force)+" kN"+"\n\n Angle : "+std::to_string(angle)+" °\n\n"+alertRot;
+
+
+      gtk_label_set_text(pPrData->fLabel, forceLabel.c_str());
     }
-  //Port wind
   else
     {
-      if(data->osMsg.GetRotDir() == 1)
-        {
-          fOsX *= -1;
-          fOsY *= -1;
-	  
-	  alertChangeRot = "You have to change rotor rotation direction !";
-        }
+      alertRot = "You have to start rotor(s) !";
+      gtk_label_set_text(pPrData->fLabel, alertRot.c_str());
     }
   
-  float angle = (atan2(-fOsX, fOsY) * 180.0 / M_PI) + 90;
-
-  if(angle > 180) 
-  {
-    float delta = (270-angle);
-    angle=-90-delta;
-  }
-  
-  float force = sqrt(fOsX*fOsX + fOsY*fOsY);
-  std::string forceLabel = "\n\n\n\n Force : "+std::to_string(force)+" kN"+"\n\n Angle : "+std::to_string(angle)+" °\n\n"+alertChangeRot;
-
-
-  gtk_label_set_text(pPrData->fLabel, forceLabel.c_str());
-
   return true; 
 }
 
