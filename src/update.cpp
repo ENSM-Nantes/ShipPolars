@@ -25,8 +25,10 @@ gboolean UpdatePolar(gpointer aUserData)
   
   std::string alertChangeRot = "";
 
+  alertChangeRot.clear();
+  
   //Starboard wind
-  if((data->osMsg.GetAWA() * 180/M_PI) >= 0 && (data->osMsg.GetAWA() * 180/M_PI) <= 180)
+  if((data->osMsg.GetAWA()) >= 0 && (data->osMsg.GetAWA()) <= 180)
     {
       if(data->osMsg.GetRotDir() == -1)
         {
