@@ -26,7 +26,7 @@ gboolean UpdatePolar(gpointer aUserData)
       //Starboard wind
       if((data->osMsg.GetAWA()) >= 0 && (data->osMsg.GetAWA()) <= 180)
 	{
-	  if(data->osMsg.GetRotDir() == -1)
+	  if(data->osMsg.GetRotDir() == 1)
 	    {
 	      pPrData->fOsX *= -1;
 	      pPrData->fOsY *= -1;
@@ -37,7 +37,7 @@ gboolean UpdatePolar(gpointer aUserData)
       //Port wind
       else
 	{
-	  if(data->osMsg.GetRotDir() == 1)
+	  if(data->osMsg.GetRotDir() == -1)
 	    {
 	      pPrData->fOsX *= -1;
 	      pPrData->fOsY *= -1;

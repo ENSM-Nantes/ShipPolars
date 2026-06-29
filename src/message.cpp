@@ -10,7 +10,7 @@ Message::Message()
   mAppWindSpeed="0";
   mAppWindDir="0";
   mRotOnOff="0";
-  mRotDir="-1";
+  mRotDir="1";
   mRotSpeed="0";
 }
 
