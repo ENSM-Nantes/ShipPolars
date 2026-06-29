@@ -167,15 +167,16 @@ void ChangeRot(GtkButton *aBtn, gpointer aRotInfos)
 
   if(!isClicked)
     {
-      isClicked = true;
-      msg += "RTR";
-      gtk_picture_set_filename(GTK_PICTURE( pRotInfos->logoRot ), "res/arrow_rot_right.png");
+      isClicked = true;  
+      msg += "RTL";
+      gtk_picture_set_filename(GTK_PICTURE( pRotInfos->logoRot ), "res/arrow_rot_left.png");
+  
     }
   else
     {
-      isClicked = false;  
-      msg += "RTL";
-      gtk_picture_set_filename(GTK_PICTURE( pRotInfos->logoRot ), "res/arrow_rot_left.png");
+      isClicked = false;
+      msg += "RTR";
+      gtk_picture_set_filename(GTK_PICTURE( pRotInfos->logoRot ), "res/arrow_rot_right.png");
     }
   
    
