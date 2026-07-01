@@ -24,7 +24,7 @@ gboolean UpdatePolar(gpointer aUserData)
   if(data->osMsg.GetRotOnOff() == true)
     {
       //Starboard wind
-      if((data->osMsg.GetAWA()) >= 0 && (data->osMsg.GetAWA()) <= 180)
+      if(data->osMsg.GetWindSide() == "starboard")
 	{
 	  if(data->osMsg.GetRotDir() == 1)
 	    {

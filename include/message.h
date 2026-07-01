@@ -17,16 +17,18 @@ class Message
   bool GetRotOnOff(void);
   int GetRotDir(void);
   float GetRotSpeed(void);
+  std::string GetWindSide(void);
   
  private:
-  std::string mSpeedThroughWater;
-  std::string mTrueWindSpeed;
-  std::string mTrueWindDir;
-  std::string mAppWindSpeed;
-  std::string mAppWindDir;
-  std::string mRotOnOff;
-  std::string mRotDir;
-  std::string mRotSpeed;
+  float mSpeedThroughWater;
+  float mTrueWindSpeed;
+  float mTrueWindDir;
+  float mAppWindSpeed;
+  float mAppWindDir;
+  bool mRotOnOff;
+  int mRotDir;
+  float mRotSpeed;
+  std::string mWindSide;
 };
 
 
