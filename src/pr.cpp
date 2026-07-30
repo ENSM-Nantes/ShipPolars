@@ -1,5 +1,21 @@
 #include "pr.h"
 #include "app.h"
+#include <cmath>
+
+void PRSetScale(sPrData *aPrData, float aMaxForce)
+{
+  /*10% headroom so the outer data point never lands exactly on the last ring*/
+  float niceMax = ceil((aMaxForce * 1.1f) / 10.0f) * 10.0f;
+  if(niceMax < 10)
+    niceMax = 10;
+
+  float step = (2 * niceMax) / (FORCE_LINE_COUNT - 1);
+
+  for(int i = 0; i < FORCE_LINE_COUNT; i++)
+    aPrData->forceLegend[i] = -niceMax + i * step;
+
+  aPrData->forceMax = niceMax;
+}
 
 void PRCreateBoxes(GtkWidget **aPrBodyBox, GtkWidget **aPrMainBox, GtkWidget **aPrTitleBox, GtkWidget **aPrLeftBox, GtkWidget **aPrMidBox, GtkWidget **aPrRightBox)
 {
@@ -77,7 +93,8 @@ void PRDrawPolarX(GtkDrawingArea *aArea, cairo_t *aCr, int aWidth, int aHeight, 
   float *forceY = pPrData->forceY;
   float fOsX = pPrData->fOsX;
   float fOsY = pPrData->fOsY;
-  
+  float forceMax = pPrData->forceMax;
+
   cx = aWidth/4;
   cy = aHeight/2;
   rMax = RADIUS_MAX;
@@ -149,8 +166,8 @@ void PRDrawPolarX(GtkDrawingArea *aArea, cairo_t *aCr, int aWidth, int aHeight, 
       offset=(rMax/FORCE_LINE_COUNT)/2;
       rStart=(rMax/2)+offset;
       
-      fXx = cx + (((rMax/2 - offset)*forceX[j]/FORCE_MAX)+(rStart))*sin(rad);
-      fXy = cy - (((rMax/2 - offset)*forceX[j]/FORCE_MAX)+(rStart))*cos(rad);
+      fXx = cx + (((rMax/2 - offset)*forceX[j]/forceMax)+(rStart))*sin(rad);
+      fXy = cy - (((rMax/2 - offset)*forceX[j]/forceMax)+(rStart))*cos(rad);
       cairo_set_source_rgb(aCr, 1, 0.5, 0.5);
       PRDrawPoint(aCr, fXx, fXy);
       
@@ -164,8 +181,8 @@ void PRDrawPolarX(GtkDrawingArea *aArea, cairo_t *aCr, int aWidth, int aHeight, 
   //Draw OwnShip curseur
   cairo_set_source_rgb(aCr, 0.2, 0.2, 0.8);
   rad=(data->osMsg.GetAWA())*M_PI/180;
-  fosx = cx + (((rMax/2 - offset)*fOsX/FORCE_MAX)+(rStart))*sin(rad);
-  fosy = cy - (((rMax/2 - offset)*fOsX/FORCE_MAX)+(rStart))*cos(rad);
+  fosx = cx + (((rMax/2 - offset)*fOsX/forceMax)+(rStart))*sin(rad);
+  fosy = cy - (((rMax/2 - offset)*fOsX/forceMax)+(rStart))*cos(rad);
   PRDrawPoint(aCr, fosx, fosy, 2);
 }
 
@@ -183,7 +200,8 @@ void PRDrawPolarY(GtkDrawingArea *aArea, cairo_t *aCr, int aWidth, int aHeight, 
   float *forceY = pPrData->forceY;
   float fOsX = pPrData->fOsX;
   float fOsY = pPrData->fOsY;
-  
+  float forceMax = pPrData->forceMax;
+
   cx = aWidth/2;
   cy = aHeight/2;
   rMax = RADIUS_MAX;
@@ -251,8 +269,8 @@ void PRDrawPolarY(GtkDrawingArea *aArea, cairo_t *aCr, int aWidth, int aHeight, 
       offset=(rMax/FORCE_LINE_COUNT)/2;
       rStart=(rMax/2)+offset;
       
-      fYx = cx + (((rMax/2 - offset)*forceY[j]/FORCE_MAX)+(rStart))*sin(rad);
-      fYy = cy - (((rMax/2 - offset)*forceY[j]/FORCE_MAX)+(rStart))*cos(rad);
+      fYx = cx + (((rMax/2 - offset)*forceY[j]/forceMax)+(rStart))*sin(rad);
+      fYy = cy - (((rMax/2 - offset)*forceY[j]/forceMax)+(rStart))*cos(rad);
       cairo_set_source_rgb(aCr, 1, 0.5, 0.5);
       PRDrawPoint(aCr, fYx, fYy);
       
@@ -266,8 +284,8 @@ void PRDrawPolarY(GtkDrawingArea *aArea, cairo_t *aCr, int aWidth, int aHeight, 
   //Draw OwnShip curseur
   cairo_set_source_rgb(aCr, 0.2, 0.2, 0.8);
   rad=(data->osMsg.GetAWA())*M_PI/180;
-  fosx = cx + (((rMax/2 - offset)*fOsY/FORCE_MAX)+(rStart))*sin(rad);
-  fosy = cy - (((rMax/2 - offset)*fOsY/FORCE_MAX)+(rStart))*cos(rad);
+  fosx = cx + (((rMax/2 - offset)*fOsY/forceMax)+(rStart))*sin(rad);
+  fosy = cy - (((rMax/2 - offset)*fOsY/forceMax)+(rStart))*cos(rad);
   PRDrawPoint(aCr, fosx, fosy, 2);
 }
 

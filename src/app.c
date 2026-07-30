@@ -6,9 +6,21 @@
 #include "sail.h"
 
 //Global app data
-sPrData gPrData={{-200,-160,-120,-80,-40,0,40,80,120,160,200},{0},{0},0,0,NULL,NULL,NULL,NULL};
+sPrData gPrData={{-200,-160,-120,-80,-40,0,40,80,120,160,200},FORCE_MAX,{0},{0},0,0,NULL,NULL,NULL,NULL};
 sAppData gAppData;
 
+//Applies a newly computed force scale on the GTK main thread (queue_draw is not thread-safe)
+static gboolean PRApplyScaleIdle(gpointer aUserData)
+{
+  float *pMaxForce = (float*)aUserData;
+
+  PRSetScale(&gPrData, *pMaxForce);
+  if(gPrData.areaX) gtk_widget_queue_draw(gPrData.areaX);
+  if(gPrData.areaY) gtk_widget_queue_draw(gPrData.areaY);
+
+  free(pMaxForce);
+  return G_SOURCE_REMOVE;
+}
 
 static void *AppThreadManagement(void *aData)
 {
@@ -55,6 +67,11 @@ static void *AppThreadManagement(void *aData)
 	  if(0 ==  gAppData.sails.Init("STW_kt", "TWS_kt", "TWA_deg"))
 	    {
 	      std::cout << "Polar file loaded : " << pPolarData->fileName << std::endl;
+
+	      //Auto-scale the polar diagrams to this file's force range (applied on the GTK main thread)
+	      float *pMaxForce = (float*)malloc(sizeof(float));
+	      *pMaxForce = gAppData.sails.GetMaxForce();
+	      g_idle_add(PRApplyScaleIdle, pMaxForce);
 
 	      //Add peridic update callback
 	      idUpdatePolar = g_timeout_add(100, UpdatePolar, &gAppData);
