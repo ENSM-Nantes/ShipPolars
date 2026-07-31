@@ -9,7 +9,6 @@
 sPrData gPrData={{-200,-160,-120,-80,-40,0,40,80,120,160,200},FORCE_MAX,{0},{0},0,0,NULL,NULL,NULL,NULL};
 sAppData gAppData;
 
-//Applies a newly computed force scale on the GTK main thread (queue_draw is not thread-safe)
 static gboolean PRApplyScaleIdle(gpointer aUserData)
 {
   float *pMaxForce = (float*)aUserData;
@@ -51,7 +50,9 @@ static void *AppThreadManagement(void *aData)
       //Polar file update
       if(isNcLoaded && (0 != strcmp(filePathSave, pPolarData->fileName)))
 	{
+	  pthread_mutex_lock(&gAppData.sailsLock);
 	  gAppData.sails.Close();
+	  pthread_mutex_unlock(&gAppData.sailsLock);
 	  std::cout << "Polar file closed : " << filePathSave << std::endl;
 	  memset(filePathSave, 0, SIZE_PATH_MAX);
 	  isNcLoaded = false;
@@ -60,17 +61,24 @@ static void *AppThreadManagement(void *aData)
 	  if(idUpdateBC) g_source_remove(idUpdateBC);
 	  if(idUpdatePolar) g_source_remove(idUpdatePolar);
 	}
-      
+
       //Get nc file
-      if(!isNcLoaded && (0 == gAppData.sails.Open(pPolarData->fileName, "TotalSails_X", "TotalSails_Y")))
+      if(!isNcLoaded)
 	{
-	  if(0 ==  gAppData.sails.Init("STW_kt", "TWS_kt", "TWA_deg"))
+	  pthread_mutex_lock(&gAppData.sailsLock);
+	  bool opened = (0 == gAppData.sails.Open(pPolarData->fileName, "TotalSails_X", "TotalSails_Y"));
+	  bool inited = opened && (0 == gAppData.sails.Init("STW_kt", "TWS_kt", "TWA_deg"));
+	  pthread_mutex_unlock(&gAppData.sailsLock);
+
+	  if(inited)
 	    {
 	      std::cout << "Polar file loaded : " << pPolarData->fileName << std::endl;
 
-	      //Auto-scale the polar diagrams to this file's force range (applied on the GTK main thread)
+	      pthread_mutex_lock(&gAppData.sailsLock);
 	      float *pMaxForce = (float*)malloc(sizeof(float));
 	      *pMaxForce = gAppData.sails.GetMaxForce();
+	      pthread_mutex_unlock(&gAppData.sailsLock);
+	      std::cout << "[DEBUG] GetMaxForce() returned " << *pMaxForce << std::endl;
 	      g_idle_add(PRApplyScaleIdle, pMaxForce);
 
 	      //Add peridic update callback
@@ -169,7 +177,8 @@ void AppActivate(GApplication *app, gpointer aUserData)
   polarData->fileName = static_cast<char*>(malloc(polarData->sizeFileName));
   strcpy(polarData->fileName, "polar.nc");
   pthread_mutex_init(&polarData->lock, nullptr);
-  AppScenarioList(&scenarioListItems, &scenarioListDropDown, polarData); 
+  pthread_mutex_init(&gAppData.sailsLock, nullptr);
+  AppScenarioList(&scenarioListItems, &scenarioListDropDown, polarData);
 
   /*Set App Thread*/
   pthread_create(&tPrIdle, nullptr, AppThreadManagement, polarData);

@@ -4,7 +4,6 @@
 
 void PRSetScale(sPrData *aPrData, float aMaxForce)
 {
-  /*10% headroom so the outer data point never lands exactly on the last ring*/
   float niceMax = ceil((aMaxForce * 1.1f) / 10.0f) * 10.0f;
   if(niceMax < 10)
     niceMax = 10;

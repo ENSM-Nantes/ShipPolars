@@ -6,19 +6,22 @@ gboolean UpdatePolar(gpointer aUserData)
   sAppData *data = (sAppData*)aUserData;
   sPrData *pPrData = (sPrData*)data->prData; 
   
-  //Get values from BC
+  pthread_mutex_lock(&data->sailsLock);
+
   for(int i=0;i<ANGLE_STEP_COUNT;i++)
     {
       pPrData->forceX[i]=data->sails.GetForce('X', data->osMsg.GetSTW(), data->osMsg.GetAWS(), i*15);
       pPrData->forceY[i]=data->sails.GetForce('Y', data->osMsg.GetSTW(), data->osMsg.GetAWS(), i*15);
     }
 
+  pPrData->fOsX = data->sails.GetForce('X', data->osMsg.GetSTW(), data->osMsg.GetAWS(), data->osMsg.GetAWA());
+  pPrData->fOsY = data->sails.GetForce('Y', data->osMsg.GetSTW(), data->osMsg.GetAWS(), data->osMsg.GetAWA());
+
+  pthread_mutex_unlock(&data->sailsLock);
+
   std::string alertRot = "";
 
   alertRot.clear();
-
-  pPrData->fOsX = data->sails.GetForce('X', data->osMsg.GetSTW(), data->osMsg.GetAWS(), data->osMsg.GetAWA());
-  pPrData->fOsY = data->sails.GetForce('Y', data->osMsg.GetSTW(), data->osMsg.GetAWS(), data->osMsg.GetAWA());
 
   
   if(data->osMsg.GetRotOnOff() == true)
