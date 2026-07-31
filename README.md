@@ -20,7 +20,7 @@ libgtk-4-dev libenet-dev libnetcdf-dev
 ```./build.sh```
    
 ## Use
-```./ShipPolars```
+```./bin/ShipPolars```
 
 ## Example
 ![alt text](https://github.com/ENSM-Nantes/ShipPolars/blob/main/res/ShipPolars_PS.png)
