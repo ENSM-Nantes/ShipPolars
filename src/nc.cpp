@@ -2,6 +2,7 @@
 #include <iostream>
 #include <cmath>
 #include <vector>
+#include <algorithm>
 
 Nc::Nc(void)
 {
@@ -156,4 +157,32 @@ float Nc::GetForce(char aAxe, float aStwValue, float aTwsValue, float aTwaValue)
     }
 
   return force;
+}
+
+float Nc::GetMaxForce(void)
+{
+  float maxForce = 0;
+  int dimIds[NC_MAX_VAR_DIMS];
+  int nDims = 0;
+  size_t totalCount = 1, dimLen = 0;
+
+  nc_inq_varndims(mIdPolarFile, mSailVarX, &nDims);
+  nc_inq_vardimid(mIdPolarFile, mSailVarX, dimIds);
+  for(int i = 0; i < nDims; i++)
+    {
+      nc_inq_dimlen(mIdPolarFile, dimIds[i], &dimLen);
+      totalCount *= dimLen;
+    }
+
+  std::vector<float> dataX(totalCount, 0), dataY(totalCount, 0);
+
+  nc_get_var_float(mIdPolarFile, mSailVarX, dataX.data());
+  nc_get_var_float(mIdPolarFile, mSailVarY, dataY.data());
+
+  for(size_t i = 0; i < totalCount; i++)
+    {
+      maxForce = std::max({maxForce, std::abs(dataX[i]), std::abs(dataY[i])});
+    }
+
+  return maxForce;
 }

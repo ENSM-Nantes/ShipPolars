@@ -13,6 +13,7 @@
 typedef struct
 {
   float forceLegend[FORCE_LINE_COUNT];
+  float forceMax;
   float forceX[ANGLE_STEP_COUNT];
   float forceY[ANGLE_STEP_COUNT];
   float fOsX;
@@ -33,6 +34,7 @@ void PRDrawPoint(cairo_t *aCr, float aX, double aY, int aSize=1);
 void PRDrawPolarX(GtkDrawingArea *aArea, cairo_t *aCr, int aWidth, int aHeight, gpointer aData);
 void PRDrawPolarY(GtkDrawingArea *aArea, cairo_t *aCr, int aWidth, int aHeight, gpointer aData);
 void PRDrawSum(GtkDrawingArea *aArea, cairo_t *aCr, int aWidth, int aHeight, gpointer aData);
+void PRSetScale(sPrData *aPrData, float aMaxForce);
 
 
 #endif

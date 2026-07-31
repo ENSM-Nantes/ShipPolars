@@ -3,6 +3,7 @@
 
 #include <iostream>
 #include <gtk/gtk.h>
+#include <pthread.h>
 #include "nc.h"
 #include "list.h"
 #include "com.h"
@@ -17,6 +18,7 @@ typedef struct
   Com hCom;
   Message osMsg;
   sPrData *prData;
+  pthread_mutex_t sailsLock;
 }sAppData;
 
 
