@@ -83,8 +83,14 @@ gboolean UpdatePolar(gpointer aUserData)
 gboolean UpdateFromBC(gpointer aUserData)
 {
   sAppData *data = (sAppData*)aUserData;
-  
+
   data->hCom.WaitMessage(0, data->osMsg);
-  
+
+  if(data->osMsg.GetShutDown())
+    {
+      g_application_quit(g_application_get_default());
+      return G_SOURCE_REMOVE;
+    }
+
   return true;
 }

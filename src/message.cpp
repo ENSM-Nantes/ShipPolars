@@ -14,6 +14,7 @@ Message::Message()
   mRotDir=-1;
   mRotSpeed=0;
   mWindSide = "";
+  mShutDown = false;
 }
 
 Message::~Message()
@@ -26,7 +27,13 @@ int Message::Parse(const char *aData, size_t aDataSize)
 {
   std::string inRawData(aData, aDataSize);
   //std::cout << "Message : " << inRawData << std::endl;
-  
+
+  if(0 == inRawData.substr(0,2).compare("SD"))
+    {
+      mShutDown = true;
+      return 0;
+    }
+
   if(0 == inRawData.substr(0,2).compare("OS"))
     {
       std::vector<std::string> inData = split(&inRawData[2],',');
@@ -50,6 +57,11 @@ int Message::Parse(const char *aData, size_t aDataSize)
     }
 
   return 0;
+}
+
+bool Message::GetShutDown(void)
+{
+  return mShutDown;
 }
 
 const float Message::GetTWS(void)

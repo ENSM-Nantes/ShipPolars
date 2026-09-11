@@ -10,6 +10,7 @@ class Message
   Message();
   ~Message();
   int Parse(const char *aData, size_t aDataSize);
+  bool GetShutDown(void);
   const float GetTWS(void);
   const float GetSTW(void);
   const float GetAWS(void);
@@ -29,6 +30,7 @@ class Message
   int mRotDir;
   float mRotSpeed;
   std::string mWindSide;
+  bool mShutDown;
 };
 
 
