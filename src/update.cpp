@@ -1,5 +1,6 @@
 #include "update.h"
 #include "app.h"
+#include <cstdio>
 
 gboolean UpdatePolar(gpointer aUserData)
 {
@@ -88,6 +89,7 @@ gboolean UpdateFromBC(gpointer aUserData)
 
   if(data->osMsg.GetShutDown())
     {
+      std::remove(POLAR_FILE_PATH);
       g_application_quit(g_application_get_default());
       return G_SOURCE_REMOVE;
     }
