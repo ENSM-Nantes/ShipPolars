@@ -1,11 +1,7 @@
 # ShipPolars
- - Choose the polar vessel to read. The polar had to be present also in Bridge-Command, polar available for now :
-   - Copenhagen Ferry with one flettner rotor from NorsePower (30x5)
-   - SC-Connector with two flettner rotors from NorsePower (30x5)	
-   - Fake cargo Maersk with two flettner rotors (18x3)
-   - Fake KVLCC2 cargo with four flettner rotors (24x4)
-   - Fake KVLCC2 cargo with five flettner rotors (30x5)
-   
+ - Bridge Command sends the ship's polar file to ShipPolars when it is launched. It is stored as `polar/polar.nc`
+   and loaded automatically; the "Polar Selection" tab shows whether a polar has been received and when.
+
  - Read a polar from a nc file and display it. The polar is refreshing from BridgeCommand according to "speed through water", "apparent wind speed" and "apparent wind direction".
    The position ship on the polar is alreadey displayed.
 

@@ -19,6 +19,8 @@ class Nc
   float GetForce(char aAxe, float aStwValue, float aTwsValue, float aTwaValue);
   float GetMaxForce(void);
   void Close(void);
+  std::string GetGlobalAttrString(const std::string aName);
+  int GetSailCount(void);
   
  private:
 

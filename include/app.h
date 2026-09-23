@@ -5,12 +5,11 @@
 #include <gtk/gtk.h>
 #include <pthread.h>
 #include "nc.h"
-#include "list.h"
 #include "com.h"
 #include "pr.h"
 #include "pi.h"
 
-#define SIZE_MAX_SCENARIO_NAME (256)
+#define POLAR_FILE_PATH ("polar/polar.nc")
 
 typedef struct
 {
@@ -23,7 +22,6 @@ typedef struct
 
 
 void AppActivate(GApplication *app, gpointer aUserData);
-void AppScenarioList(GtkStringList **aScenarioItems, GtkWidget **aScenarioDropDown, sPolarData *aPolarData);
 
 
 

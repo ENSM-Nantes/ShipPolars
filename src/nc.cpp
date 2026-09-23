@@ -159,6 +159,44 @@ float Nc::GetForce(char aAxe, float aStwValue, float aTwsValue, float aTwaValue)
   return force;
 }
 
+std::string Nc::GetGlobalAttrString(const std::string aName)
+{
+  nc_type xtype;
+  size_t len = 0;
+
+  if(NC_NOERR != nc_inq_att(mIdPolarFile, NC_GLOBAL, aName.c_str(), &xtype, &len) || NC_CHAR != xtype)
+    return "";
+
+  std::vector<char> buffer(len+1, 0);
+  nc_get_att_text(mIdPolarFile, NC_GLOBAL, aName.c_str(), buffer.data());
+
+  return std::string(buffer.data(), len);
+}
+
+int Nc::GetSailCount(void)
+{
+  int count = 0;
+  int nVars = 0;
+
+  nc_inq_nvars(mIdPolarFile, &nVars);
+
+  for(int i = 0; i < nVars; i++)
+    {
+      char name[NC_MAX_NAME+1] = {0};
+      nc_inq_varname(mIdPolarFile, i, name);
+      std::string varName(name);
+
+      //Per-sail force variables are named "Sail_<sail name>_X" (the aggregate is "TotalSails_X")
+      if(0 == varName.rfind("Sail_", 0) && varName.size() > 2 &&
+         0 == varName.compare(varName.size()-2, 2, "_X"))
+        {
+          count++;
+        }
+    }
+
+  return count;
+}
+
 float Nc::GetMaxForce(void)
 {
   float maxForce = 0;

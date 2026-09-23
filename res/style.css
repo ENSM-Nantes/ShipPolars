@@ -13,6 +13,13 @@
   font-family: "Inter Black";
 }
 
+.status-label {
+  font-style: normal;
+  font-size: 30px;
+  color: White;
+  font-family: "Inter Black";
+}
+
 .textOut-label {
   font-style: normal;
   font-size: 14px;
