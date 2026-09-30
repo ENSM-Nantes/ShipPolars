@@ -32,12 +32,13 @@ gboolean UpdatePolar(gpointer aUserData)
 	  if(data->osMsg.GetRotDir() == 1)
 	    {
 	      alertRot = "You have to change\nrotor rotation direction !";
-	    }
+	    
 	  
-	  if(data->osMsg.GetAWA() > 30)
-	    {
-	      pPrData->fOsX *= -1;
-	      pPrData->fOsY *= -1;
+	      if(data->osMsg.GetAWA() > 30)
+		{
+		  pPrData->fOsX *= -1;
+		  pPrData->fOsY *= -1;
+		}
 	    }
 	}
       //Port wind
@@ -46,12 +47,13 @@ gboolean UpdatePolar(gpointer aUserData)
 	  if(data->osMsg.GetRotDir() == -1)
 	    {	 
 	      alertRot = "You have to change\nrotor rotation direction !";
-	    }
+	    
 
-	  if(data->osMsg.GetAWA()  < -30)
-	    {
-	      pPrData->fOsX *= -1;
-	      pPrData->fOsY *= -1;
+	      if(data->osMsg.GetAWA()  < -30)
+		{
+		  pPrData->fOsX *= -1;
+		  pPrData->fOsY *= -1;
+		}
 	    }
 	}
   
