@@ -34,7 +34,7 @@ gboolean UpdatePolar(gpointer aUserData)
 	      alertRot = "You have to change\nrotor rotation direction !";
 	    }
 	  
-	  if((data->osMsg.GetAWA() * 180.0 / M_PI) > 30)
+	  if(data->osMsg.GetAWA() > 30)
 	    {
 	      pPrData->fOsX *= -1;
 	      pPrData->fOsY *= -1;
@@ -48,7 +48,7 @@ gboolean UpdatePolar(gpointer aUserData)
 	      alertRot = "You have to change\nrotor rotation direction !";
 	    }
 
-	  if((data->osMsg.GetAWA() * 180.0 / M_PI) < -30)
+	  if(data->osMsg.GetAWA()  < -30)
 	    {
 	      pPrData->fOsX *= -1;
 	      pPrData->fOsY *= -1;
