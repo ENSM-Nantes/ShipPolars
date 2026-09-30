@@ -23,7 +23,6 @@ gboolean UpdatePolar(gpointer aUserData)
   std::string alertRot = "";
 
   alertRot.clear();
-
   
   if(data->osMsg.GetRotOnOff() == true)
     {
@@ -32,21 +31,27 @@ gboolean UpdatePolar(gpointer aUserData)
 	{
 	  if(data->osMsg.GetRotDir() == 1)
 	    {
+	      alertRot = "You have to change\nrotor rotation direction !";
+	    }
+	  
+	  if((data->osMsg.GetAWA() * 180.0 / M_PI) > 30)
+	    {
 	      pPrData->fOsX *= -1;
 	      pPrData->fOsY *= -1;
-
-	      alertRot = "You have to change\nrotor rotation direction !";
 	    }
 	}
       //Port wind
       else
 	{
 	  if(data->osMsg.GetRotDir() == -1)
+	    {	 
+	      alertRot = "You have to change\nrotor rotation direction !";
+	    }
+
+	  if((data->osMsg.GetAWA() * 180.0 / M_PI) < -30)
 	    {
 	      pPrData->fOsX *= -1;
 	      pPrData->fOsY *= -1;
-	  
-	      alertRot = "You have to change\nrotor rotation direction !";
 	    }
 	}
   
