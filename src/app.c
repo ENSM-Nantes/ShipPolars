@@ -75,7 +75,11 @@ static void *AppThreadManagement(void *aData)
 	}
 
       //Pause the thread
+#ifdef WIN32
+      Sleep(1);
+#else
       sleep(1);
+#endif
     }
 
   /*Nc Management*/
@@ -146,7 +150,12 @@ static void *AppThreadManagement(void *aData)
 	}
 
       //Pause the thread
+#ifdef WIN32
+      Sleep(2);
+#else
       sleep(2);
+#endif
+
     }
 
   return NULL;
