@@ -48,12 +48,10 @@ int Message::Parse(const char *aData, size_t aDataSize)
       mRotDir = std::stoi(inData.at(10));
       mRotSpeed = std::stof(inData.at(11));
 
-      if(GetAWA() < 0)
+      if(GetAWA(true) < 0)
 	mWindSide = "port";
       else
 	mWindSide = "starboard";
-
-      mAppWindDir = fabs(mAppWindDir);
     }
 
   return 0;
@@ -79,9 +77,12 @@ const float Message::GetSTW(void)
   return mSpeedThroughWater;
 }
 
-const float Message::GetAWA(void)
+const float Message::GetAWA(bool aIsSign)
 {
-  return mAppWindDir;
+  if(true == aIsSign)
+    return mAppWindDir;
+  else
+    return fabs(mAppWindDir);
 }
 
 bool Message::GetRotOnOff(void)

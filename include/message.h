@@ -14,7 +14,7 @@ class Message
   const float GetTWS(void);
   const float GetSTW(void);
   const float GetAWS(void);
-  const float GetAWA(void);
+  const float GetAWA(bool aIsSign = false);
   bool GetRotOnOff(void);
   int GetRotDir(void);
   float GetRotSpeed(void);
