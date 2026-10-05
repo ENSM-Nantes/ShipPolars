@@ -141,13 +141,13 @@ void SaSetBoxes(GtkWidget **aSaBodyBox,GtkWidget **aSaMainBox,GtkWidget **aSaTit
   *aPowerLabel = gtk_label_new(" ");
   aRotInfos->powerLabel = *aPowerLabel;
   
-  *aLogoRotorCheck = gtk_picture_new_for_filename("res/cross.png");
+  *aLogoRotorCheck = gtk_picture_new_for_filename("../res/cross.png");
   aRotInfos->logoCheck = *aLogoRotorCheck;
 
   *aRotSpeedLabel = gtk_label_new(" ");
   aRotInfos->rotSpeedLabel = *aRotSpeedLabel;
   
-  *aLogoRotorDir = gtk_picture_new_for_filename("res/arrow_rot_left.png");
+  *aLogoRotorDir = gtk_picture_new_for_filename("../res/arrow_rot_left.png");
   aRotInfos->logoRot = *aLogoRotorDir;
 
   
