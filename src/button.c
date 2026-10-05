@@ -32,14 +32,14 @@ void OnOffRotor(GtkButton *aBtn, gpointer aRotInfos)
     {
       isClicked = true;
       msg += "RT1";
-      gtk_picture_set_filename(GTK_PICTURE( pRotInfos->logoCheck ), "res/check.png");
+      gtk_picture_set_filename(GTK_PICTURE( pRotInfos->logoCheck ), "../res/check.png");
       gtk_label_set_text(GTK_LABEL(pRotInfos->powerLabel), "Please wait until the rotor reaches its rated speed");
     }
   else
     {
       isClicked = false;
       msg += "RT0";
-      gtk_picture_set_filename(GTK_PICTURE( pRotInfos->logoCheck ), "res/cross.png");
+      gtk_picture_set_filename(GTK_PICTURE( pRotInfos->logoCheck ), "../res/cross.png");
       gtk_label_set_text(GTK_LABEL(pRotInfos->powerLabel), "Please wait until the rotor has finished turning");
     }
 

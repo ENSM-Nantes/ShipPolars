@@ -207,7 +207,7 @@ void AppActivate(GApplication *app, gpointer aUserData)
   /*Generic header*/
   headerBox = gtk_box_new(GTK_ORIENTATION_HORIZONTAL, 100);
   empty1 = gtk_label_new("                ");
-  logo = gtk_picture_new_for_filename("res/logo_ensm.png");
+  logo = gtk_picture_new_for_filename("../res/logo_ensm.png");
   gtk_box_append(GTK_BOX (headerBox), logo);
   gtk_box_append(GTK_BOX (headerBox), empty1);
   /********/
@@ -354,7 +354,7 @@ void AppActivate(GApplication *app, gpointer aUserData)
 
   /*CSS*/
   GtkCssProvider *provider = gtk_css_provider_new();
-  gtk_css_provider_load_from_path(provider, "res/style.css");
+  gtk_css_provider_load_from_path(provider, "../res/style.css");
   gtk_style_context_add_provider_for_display(gdk_display_get_default(), GTK_STYLE_PROVIDER(provider), GTK_STYLE_PROVIDER_PRIORITY_USER);
   gtk_widget_add_css_class(headerBox, "header-label");
   gtk_widget_add_css_class(labelFooter, "footer-label");

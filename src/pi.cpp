@@ -84,12 +84,12 @@ void PIUpdateStatus(sPolarStatusData *aData, bool aLoaded, const char *aPath, co
 
       gtk_label_set_text(aData->labelStatus, status.c_str());
       gtk_label_set_text(aData->labelDetails, details.c_str());
-      gtk_image_set_from_file(GTK_IMAGE(aData->logoStatus), "res/check.png");
+      gtk_image_set_from_file(GTK_IMAGE(aData->logoStatus), "../res/check.png");
     }
   else
     {
       gtk_label_set_text(aData->labelStatus, "Waiting connexion ...");
       gtk_label_set_text(aData->labelDetails, " ");
-      gtk_image_set_from_file(GTK_IMAGE(aData->logoStatus), "res/cross.png");
+      gtk_image_set_from_file(GTK_IMAGE(aData->logoStatus), "../res/cross.png");
     }
 }
