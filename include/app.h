@@ -9,7 +9,7 @@
 #include "pr.h"
 #include "pi.h"
 
-#define POLAR_FILE_PATH ("polar/polar.nc")
+#define POLAR_FILE_PATH ("../polar/polar.nc")
 
 typedef struct
 {
